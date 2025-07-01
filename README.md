@@ -1,16 +1,14 @@
-[![License: CC BY-NC-ND 4.0](https://img.shields.io/badge/License-CC%20BY--NC--ND%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-nd/4.0/)
-
-
 🐛 BugNest - Issue Visualization Tool
 
-**BugNest** is an internal platform for tracking and visualizing software issues and bugs across teams and projects. It provides a modern UI and robust backend API to simplify collaboration, improve transparency, and streamline issue management. Built to empower development teams with clear visibility into their work through structured project spaces, smart tagging, real-time activity logs, and insightful summaries.
 
+
+BugNest is an internal platform for tracking and visualizing software issues and bugs across teams and projects. It provides a modern UI and robust backend API to simplify collaboration, improve transparency, and streamline issue management. Built to empower development teams with clear visibility into their work through structured project spaces, smart tagging, real-time activity logs, and insightful summaries.
 
 📦 Tech Stack Overview
 
 🖼 Frontend
 
-Framework: React with Vite — fast, modern build tool.
+Framework: React with Vite — fast, modern build tool
 
 Language: TypeScript
 
@@ -44,7 +42,6 @@ Logging: Serilog (recommended)
 
 Documentation: Swagger (Swashbuckle)
 
-
 🚀 Getting Started
 
 🖥 Frontend Setup (React Vite)
@@ -67,7 +64,7 @@ Public and private projects
 
 Tag management modal (connected to backend)
 
-Configure Axios with the correct base URL for your backend (e.g., http://localhost:5001).
+⚙️ Configure Axios with the correct base URL for your backend (e.g., http://localhost:5001).
 
 🧠 Backend Setup (.NET Web API)
 
@@ -117,7 +114,7 @@ GET /api/auth/me
 
 PUT /api/auth/me
 
-POST /api/auth/upload — upload profile picture
+POST /api/auth/upload — Upload profile picture
 
 📁 Project Management
 
@@ -220,5 +217,4 @@ Want to contribute? Fork it, credit it, and use it internally — no problem.
 GitHub: @AriandikaFebrian
 
 Email: available on request via GitHub profile
-
 
