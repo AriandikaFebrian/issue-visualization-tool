@@ -141,7 +141,15 @@ Authorization: Bearer <your-jwt-token>
 
 ## 📄 License
 
+This software is licensed under the **Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License**.
+
 [![License: CC BY-NC-ND 4.0](https://img.shields.io/badge/License-CC%20BY--NC--ND%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-nd/4.0/)
+
+> By using this software, you agree to the following terms:
+> - Attribution — You must give appropriate credit to the original author: **Ariandika Febrian**
+> - NonCommercial — You may not use the material for commercial purposes.
+> - NoDerivatives — You may not distribute modified material.
+
 
 This project is licensed under the **Creative Commons BY-NC-ND 4.0** license.
 
