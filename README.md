@@ -2,7 +2,7 @@
 ![Status](https://img.shields.io/badge/status-internal-orange)
 ![Built with .NET 7](https://img.shields.io/badge/backend-ASP.NET%20Core%207-blue)
 ![Frontend React](https://img.shields.io/badge/frontend-React%20%2B%20Vite-61DAFB)
-![Last Updated](https://img.shields.io/github/last-commit/AriandikaFebrian/bugnest)
+![Last Updated](https://img.shields.io/github/last-commit/AriandikaFebrian/issue-visualization-tool)
 
 
 # 🐛 BugNest — Issue Visualization Tool
