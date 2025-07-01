@@ -1,0 +1,18 @@
+# Node (frontend)
+node_modules/
+dist/
+.vite/
+
+# Dotnet (backend)
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Env & IDE
+.env
+.vscode/
+.DS_Store
+Thumbs.db
