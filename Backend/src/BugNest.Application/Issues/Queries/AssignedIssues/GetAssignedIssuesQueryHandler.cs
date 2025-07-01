@@ -1,4 +1,3 @@
-// 📁 Application/UseCases/Issues/Queries/GetAssignedIssuesQueryHandler.cs
 using BugNest.Application.DTOs.Issues;
 using BugNest.Application.Interfaces;
 using MediatR;

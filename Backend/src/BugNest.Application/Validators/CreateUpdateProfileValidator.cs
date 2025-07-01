@@ -1,4 +1,3 @@
-// 📁 Application/UseCases/Users/Validators/UpdateProfileValidator.cs
 using FluentValidation;
 using BugNest.Application.Common.Dtos;
 

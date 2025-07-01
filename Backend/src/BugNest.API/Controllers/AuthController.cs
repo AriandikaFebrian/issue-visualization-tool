@@ -1,4 +1,3 @@
-// 📁 BugNest.API/Controllers/AuthController.cs
 
 using BugNest.Application.Common.Dtos;
 using BugNest.Application.Interfaces;
@@ -22,8 +21,6 @@ public class AuthController : ControllerBase
         _mediator = mediator;
         _userRepository = userRepository;
     }
-
-    // ✅ REGISTER
    [HttpPost("register")]
 [AllowAnonymous]
 public async Task<IActionResult> Register([FromBody] RegisterUserDto dto)
@@ -35,9 +32,6 @@ public async Task<IActionResult> Register([FromBody] RegisterUserDto dto)
 
     return Ok(result);
 }
-
-
-    // ✅ LOGIN
     [HttpPost("login")]
     [AllowAnonymous]
     public async Task<IActionResult> Login([FromBody] LoginCommand command)
@@ -49,8 +43,6 @@ public async Task<IActionResult> Register([FromBody] RegisterUserDto dto)
 
         return Ok(result);
     }
-
-    // ✅ GET CURRENT USER PROFILE
     [HttpGet("me")]
     [Authorize]
     public async Task<IActionResult> Me()
@@ -77,8 +69,6 @@ public async Task<IActionResult> Register([FromBody] RegisterUserDto dto)
             user.Position
         });
     }
-
-    // ✅ UPDATE PROFILE
     [HttpPut("me")]
     [Authorize]
     public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileRequestDto request)
@@ -111,8 +101,6 @@ public async Task<IActionResult> Register([FromBody] RegisterUserDto dto)
             return BadRequest(new { message = ex.Message });
         }
     }
-
-    // ✅ UPLOAD PROFILE PICTURE
     [HttpPost("upload")]
     [Authorize]
     public async Task<IActionResult> UploadProfilePicture(IFormFile file)

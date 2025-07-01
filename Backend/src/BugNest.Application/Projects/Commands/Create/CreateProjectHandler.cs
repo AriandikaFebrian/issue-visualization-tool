@@ -1,4 +1,3 @@
-// 📁 Application/Projects/Commands/CreateProject/CreateProjectHandler.cs
 using BugNest.Application.DTOs.Projects;
 using BugNest.Application.Interfaces;
 using BugNest.Domain.Entities;
@@ -52,8 +51,6 @@ public class CreateProjectHandler : IRequestHandler<CreateProjectCommand, Guid>
 
     await _projectRepository.AddAsync(project);
     await _projectRepository.SaveChangesAsync();
-
-    // ✅ Tambahkan ini agar pipeline logging bisa bekerja
     request.CreatedProjectId = project.Id;
 
     return project.Id;

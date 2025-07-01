@@ -7,8 +7,6 @@ interface AuthContextType {
   setAuthMode: (mode: AuthMode) => void;
   toggleAuthMode: () => void;
 }
-
-// Default value saat tidak ada provider (optional/fallback)
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {

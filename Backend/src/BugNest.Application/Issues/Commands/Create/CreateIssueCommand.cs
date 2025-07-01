@@ -1,4 +1,3 @@
-// 📁 Application/UseCases/Issues/Commands/CreateIssueCommand.cs
 using BugNest.Application.DTOs.Issues;
 using BugNest.Domain.Enums;
 using MediatR;
@@ -9,8 +8,6 @@ public class CreateIssueCommand : IRequest<IssueCreatedDto>, IAuditableCommand
 {
     public CreateIssueDto Dto { get; }
     public string NRP { get; }
-
-    // TargetEntityId akan diisi nanti saat handler selesai (sementara init default dulu)
     public Guid CreatedIssueId { get; set; } = Guid.Empty;
    public Guid CreatedProjectId { get; set; }
     public CreateIssueCommand(CreateIssueDto dto, string nrp)
@@ -18,8 +15,6 @@ public class CreateIssueCommand : IRequest<IssueCreatedDto>, IAuditableCommand
         Dto = dto;
         NRP = nrp;
     }
-
-    // 🟡 Untuk audit logging (pipeline behavior)
     public ActivityAction Action => ActivityAction.CreatedIssue;
     public ActivityEntityType TargetEntityType => ActivityEntityType.Issue;
     public Guid TargetEntityId => CreatedIssueId;

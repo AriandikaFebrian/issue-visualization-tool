@@ -1,4 +1,3 @@
-// 📁 BugNest.Application/DTOs/Comments/AddCommentDto.cs
 public class AddCommentDto
 {
     public Guid IssueId { get; set; }

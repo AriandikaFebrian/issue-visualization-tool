@@ -1,4 +1,3 @@
-// 📁 Application/UseCases/Users/Commands/UpdateProfileHandler.cs
 using MediatR;
 using BugNest.Application.Interfaces;
 using BugNest.Domain.Entities;

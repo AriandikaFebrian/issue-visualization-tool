@@ -1,4 +1,3 @@
-// Application/UseCases/Notifications/MarkNotificationAsReadHandler.cs
 public class MarkNotificationAsReadHandler
 {
     private readonly INotificationService _notificationService;

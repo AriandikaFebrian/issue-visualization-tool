@@ -26,7 +26,6 @@ public class AuditLoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequ
 
     if (request is IAuditableCommand auditable)
     {
-        // Debug nilai auditable
         Console.WriteLine($"Audit Log - PerformedByNRP: {auditable.PerformedByNRP}");
         Console.WriteLine($"Audit Log - ProjectId: {auditable.ProjectId}");
         Console.WriteLine($"Audit Log - TargetEntityId: {auditable.TargetEntityId}");

@@ -49,8 +49,6 @@ public class RecentProjectRepository : IRecentProjectRepository
                 AccessedAt = DateTime.UtcNow
             });
         }
-
-        // Jaga jumlah maksimal 5
         var recentList = await _context.RecentProjectAccesses
             .Where(r => r.NRP == nrp)
             .OrderByDescending(r => r.AccessedAt)

@@ -6,7 +6,7 @@ export default function LoginPage() {
   return (
     <Box
       sx={{
-        height: "100vh", // beda dengan minHeight
+        height: "100vh",
         backgroundColor: "#0d1117",
         display: "flex",
         flexDirection: "column",

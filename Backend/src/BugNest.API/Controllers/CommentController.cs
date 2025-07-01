@@ -34,7 +34,6 @@ public class CommentsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateComment([FromBody] CreateCommentRequest request)
     {
-        // Ambil NRP dari JWT atau ClaimsPrincipal
         var nrp = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrWhiteSpace(nrp))
             return Unauthorized("NRP tidak ditemukan dalam token.");
@@ -42,7 +41,7 @@ public class CommentsController : ControllerBase
         var command = new CreateCommentCommand(request.IssueCode, request.Content, nrp);
 
         CommentDto result = await _mediator.Send(command);
-        return Ok(result); // 200 OK + CommentDto
+        return Ok(result);
     }
 
 }

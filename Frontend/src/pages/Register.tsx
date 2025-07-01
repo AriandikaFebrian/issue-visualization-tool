@@ -33,8 +33,6 @@ const stepDescriptions = [
       "Posisi menunjukkan jabatan Anda di organisasi, penting untuk pengelompokan tugas dan laporan.",
   },
 ];
-
-// Ini array penjelasan "Kenapa BugNEst?" per step
 const bugNestReasons = [
   [
     "BugNEst memudahkan kolaborasi laporan bug dengan tim.",

@@ -94,10 +94,8 @@ public class CreateIssueCommandHandler : IRequestHandler<CreateIssueCommand, Iss
     }
 
     await _issueRepository.SaveChangesAsync();
-
-    // ✅ Set ID untuk audit log
     request.CreatedIssueId = issue.Id;
-    request.ProjectId = project.Id; // <--- 🟡 INI yang sebelumnya hilang!
+    request.ProjectId = project.Id;
 
     return new IssueCreatedDto
     {

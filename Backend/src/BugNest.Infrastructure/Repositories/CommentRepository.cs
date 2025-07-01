@@ -18,12 +18,10 @@ public class CommentRepository : ICommentRepository
     {
         await _context.Comments.AddAsync(comment);
     }
-
-    // 🔄 Ganti dari GetByIssueIdAsync ➡ GetByIssueCodeAsync
     public async Task<List<Comment>> GetByIssueCodeAsync(string issueCode)
     {
         return await _context.Comments
-            .Include(c => c.User) // 🔍 ambil data user (nama, nrp, avatar, dll)
+            .Include(c => c.User)
             .Include(c => c.Issue)
             .Where(c => c.Issue != null && c.Issue.IssueCode == issueCode)
             .OrderByDescending(c => c.CreatedAt)

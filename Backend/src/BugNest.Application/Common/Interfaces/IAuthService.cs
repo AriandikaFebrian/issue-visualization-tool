@@ -1,4 +1,3 @@
-// 📁 BugNest.Application/Interfaces/IAuthService.cs
 using BugNest.Domain.Entities;
 
 namespace BugNest.Application.Interfaces;

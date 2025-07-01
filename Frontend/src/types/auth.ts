@@ -2,7 +2,7 @@ export interface RegisterFormInputs {
   Username: string;
   Email: string;
   Password: string;
-  Role: string; // or UserRole if it's a union of string literals
+  Role: string;
   FullName: string;
   PhoneNumber: string;
   Department: string;
@@ -23,7 +23,7 @@ export interface LoginFormInputs {
 }
 
 export interface LoginResponse {
-  id: string; // UUID user id
+  id: string;
   token: string;
   username: string;
   email: string;

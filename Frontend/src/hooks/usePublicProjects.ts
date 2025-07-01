@@ -1,4 +1,3 @@
-// 📁 src/hooks/usePublicProjects.ts
 import { useEffect, useState } from 'react';
 import type { Project } from '../types/project';
 import { fetchPublicProjects } from '../api/projectApi';

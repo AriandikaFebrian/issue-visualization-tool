@@ -1,4 +1,3 @@
-// 📁 src/types/project.ts
 export interface Project {
   profilePictureUrl: any;
   id: string;

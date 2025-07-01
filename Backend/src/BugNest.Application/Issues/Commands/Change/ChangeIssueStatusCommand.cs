@@ -9,12 +9,8 @@ public class ChangeIssueStatusCommand : IRequest<Unit>, IAuditableCommand
     public IssueStatus NewStatus { get; set; }
     public string ChangedByNRP { get; set; }
     public string? Note { get; set; }
-
-    // Akan diisi oleh handler
     public Guid ChangedIssueId { get; set; }
     public Guid ProjectId { get; set; }
-
-    // ✅ Untuk keperluan audit log (optional tapi berguna)
     public string? PreviousValue { get; set; }
     public string? NewValue { get; set; }
 

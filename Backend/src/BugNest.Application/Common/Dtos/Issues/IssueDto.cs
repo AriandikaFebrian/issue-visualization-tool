@@ -3,20 +3,16 @@ namespace BugNest.Application.DTOs.Issues;
 public class IssueDto
 {
     public Guid Id { get; set; }
-      public string IssueCode { get; set; } = ""; // ✅ Tambahkan ini
+      public string IssueCode { get; set; } = "";
     public string Title { get; set; } = string.Empty;
     public IssueStatus Status { get; set; }
     public PriorityLevel Priority { get; set; }
 
         public string ProjectCode { get; set; } = default!;
-
-    // 🆕 Tambahan opsional untuk pelengkap
     public string? Description { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? Deadline { get; set; }
     public int? EstimatedFixHours { get; set; }
-
-    // 🧑 Creator (optional, tapi berguna untuk audit log / UI)
     public CreatorUserDto? Creator { get; set; }
 
     public List<TagDto> Tags { get; set; } = new();
@@ -42,7 +38,7 @@ public class TagDto
     public Guid Id { get; set; }
     public string Name { get; set; } = "";
     public string Color { get; set; } = "#cccccc";
-    public string? Category { get; set; } // tambah properti category
+    public string? Category { get; set; }
 }
 
 

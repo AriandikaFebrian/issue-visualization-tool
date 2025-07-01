@@ -5,7 +5,7 @@ using MediatR;
 
 namespace BugNest.Application.UseCases.Issues.Commands;
 
-public class ChangeIssueStatusCommandHandler : IRequestHandler<ChangeIssueStatusCommand, Unit> // ✅ tambahkan `, Unit`
+public class ChangeIssueStatusCommandHandler : IRequestHandler<ChangeIssueStatusCommand, Unit>
 {
     private readonly IIssueRepository _issueRepository;
     private readonly IIssueHistoryRepository _historyRepository;
@@ -21,7 +21,7 @@ public class ChangeIssueStatusCommandHandler : IRequestHandler<ChangeIssueStatus
         _userRepository = userRepository;
     }
 
-    public async Task<Unit> Handle(ChangeIssueStatusCommand request, CancellationToken cancellationToken) // ✅ return Task<Unit>
+    public async Task<Unit> Handle(ChangeIssueStatusCommand request, CancellationToken cancellationToken)
     {
         var issue = await _issueRepository.GetByCodeAsync(request.IssueCode);
         if (issue == null)
@@ -57,6 +57,6 @@ request.PreviousValue = oldStatus.ToString();
 request.NewValue = request.NewStatus.ToString();
 
 
-        return Unit.Value; // ✅ kembalikan Unit.Value
+        return Unit.Value;
     }
 }

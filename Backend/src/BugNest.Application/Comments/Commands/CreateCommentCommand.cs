@@ -9,10 +9,8 @@ public class CreateCommentCommand : IRequest<CommentDto>, IAuditableCommand
     public string IssueCode { get; set; }
     public string Content { get; set; }
     public string NRP { get; set; }
-
-    // ⬇️ Properti tambahan hanya untuk log
-    public Guid CreatedCommentId { get; set; }  // diset di handler
-    public Guid ProjectId { get; set; }         // diset di handler
+    public Guid CreatedCommentId { get; set; }
+    public Guid ProjectId { get; set; }
 
     public CreateCommentCommand(string issueCode, string content, string nrp)
     {
@@ -20,8 +18,6 @@ public class CreateCommentCommand : IRequest<CommentDto>, IAuditableCommand
         Content = content;
         NRP = nrp;
     }
-
-    // IAuditableCommand
     public ActivityAction Action => ActivityAction.AddedComment;
     public ActivityEntityType TargetEntityType => ActivityEntityType.Comment;
     public Guid TargetEntityId => CreatedCommentId;

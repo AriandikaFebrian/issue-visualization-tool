@@ -1,4 +1,3 @@
-// 📁 BugNest.Domain/Entities/Join/IssueTag.cs
 
 using BugNest.Domain.Entities;
 using BugNest.Domain.Enums;
@@ -14,5 +13,5 @@ public class IssueTag
     public Tag Tag { get; set; } = default!;
 
     public DateTime AssignedAt { get; set; } = DateTime.UtcNow;
-    public string? AssignedByNRP { get; set; } // audit, jika perlu
+    public string? AssignedByNRP { get; set; }
 }

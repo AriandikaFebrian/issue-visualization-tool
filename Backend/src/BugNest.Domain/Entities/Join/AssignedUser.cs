@@ -1,4 +1,3 @@
-// 📁 BugNest.Domain/Entities/Join/AssignedUser.cs
 namespace BugNest.Domain.Entities;
 public class AssignedUser
 {

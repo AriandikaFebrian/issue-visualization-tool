@@ -1,4 +1,3 @@
-// 📁 BugNest.Application/Interfaces/IProjectMemberRepository.cs
 using BugNest.Domain.Entities;
 
 namespace BugNest.Application.Interfaces;

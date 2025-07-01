@@ -41,15 +41,15 @@ export default function EnumStep({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 2,
-    bgcolor: value === opt ? "#238636" : "#161b22", // active vs default bg
-    color: value === opt ? "#ffffff" : "#c9d1d9",    // active vs default text
+    bgcolor: value === opt ? "#238636" : "#161b22",
+    color: value === opt ? "#ffffff" : "#c9d1d9",
     fontWeight: 600,
     cursor: "pointer",
     border: `1px solid ${value === opt ? "#238636" : "#30363d"}`,
     transition: "all 0.2s ease-in-out",
     "&:hover": {
       bgcolor: value === opt ? "#2ea043" : "#21262d",
-      borderColor: "#58a6ff", // biru hover
+      borderColor: "#58a6ff",
     },
   }}
 >

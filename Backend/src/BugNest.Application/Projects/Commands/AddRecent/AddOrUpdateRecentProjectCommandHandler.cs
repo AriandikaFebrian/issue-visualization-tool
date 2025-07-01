@@ -1,10 +1,9 @@
-// 📁 Application/Projects/Commands/AddOrUpdateRecentProject/AddOrUpdateRecentProjectCommandHandler.cs
 using BugNest.Application.Interfaces;
 using MediatR;
 
 namespace BugNest.Application.Projects.Commands.AddOrUpdateRecentProject;
 
-public class AddOrUpdateRecentProjectCommandHandler : IRequestHandler<AddOrUpdateRecentProjectCommand, Unit> // ✅ Tambahkan , Unit
+public class AddOrUpdateRecentProjectCommandHandler : IRequestHandler<AddOrUpdateRecentProjectCommand, Unit>
 {
     private readonly IRecentProjectRepository _recentProjectRepository;
 

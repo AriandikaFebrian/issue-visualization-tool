@@ -71,22 +71,22 @@ public class GetProjectIssueDetailQueryHandler : IRequestHandler<GetProjectIssue
                 {
                     Id = i.Id,
                     Title = i.Title,
-                   Status = i.Status,       // enum → enum (aman)
-Priority = i.Priority,   // enum → enum (aman)as
+                    Status = i.Status,
+                    Priority = i.Priority,
 
-                    CreatedAt = i.CreatedAt,
-                    AssignedUsers = i.AssignedUsers.Select(u => new AssignedUserDto
-{
-    UserId = u.User.Id,
-    NRP = u.User.NRP,
-    Username = u.User.Username,
-    FullName = u.User.FullName,
-    Email = u.User.Email,
-    Role = u.User.Role.ToString(),
-    Position = u.User.Position?.ToString(),
-    Department = u.User.Department?.ToString(),
-    ProfilePictureUrl = u.User.ProfilePictureUrl
-}).ToList()
+                                        CreatedAt = i.CreatedAt,
+                                        AssignedUsers = i.AssignedUsers.Select(u => new AssignedUserDto
+                    {
+                        UserId = u.User.Id,
+                        NRP = u.User.NRP,
+                        Username = u.User.Username,
+                        FullName = u.User.FullName,
+                        Email = u.User.Email,
+                        Role = u.User.Role.ToString(),
+                        Position = u.User.Position?.ToString(),
+                        Department = u.User.Department?.ToString(),
+                        ProfilePictureUrl = u.User.ProfilePictureUrl
+                    }).ToList()
 
                 }).ToList(),
 

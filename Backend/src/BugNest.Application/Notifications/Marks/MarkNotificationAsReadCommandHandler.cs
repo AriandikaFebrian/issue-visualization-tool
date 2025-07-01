@@ -1,4 +1,3 @@
-// Application/UseCases/Notifications/Commands/MarkNotificationAsReadCommandHandler.cs
 using BugNest.Application.Interfaces;
 using MediatR;
 

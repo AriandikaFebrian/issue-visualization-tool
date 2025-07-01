@@ -11,14 +11,8 @@ public class LogActivityDto
     public ActivityAction Action { get; set; }
 
     public Guid TargetEntityId { get; set; }
-
-    // 🧾 Jenis entitas yang dilog (opsional, misal: "Issue", "Comment")
     public string? TargetEntityType { get; set; }
-
-    // 📝 Ringkasan aktivitas (opsional, human readable)
     public string? Summary { get; set; }
-
-    // 🌐 Metadata audit (opsional)
-    public string? SourcePlatform { get; set; }  // Web, Mobile, API, dll
-    public string? IPAddress { get; set; }       // IP pengguna
+    public string? SourcePlatform { get; set; }
+    public string? IPAddress { get; set; }
 }

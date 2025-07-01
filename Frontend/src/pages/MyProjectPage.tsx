@@ -1,6 +1,6 @@
 import React from "react";
 import CreateProjectForm from "../components/Project/CreateProjectForm";
-import MyProjects from "../components/Project/MyProjects"; // pastikan path sesuai
+import MyProjects from "../components/Project/MyProjects";
 
 export default function MyProjectPage() {
   return (

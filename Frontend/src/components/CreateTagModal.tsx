@@ -1,4 +1,3 @@
-// components/CreateTagModal.tsx
 import {
   Box,
   Button,

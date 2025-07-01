@@ -26,8 +26,8 @@ public class IssueController : ControllerBase
 [HttpPost]
 public async Task<IActionResult> Create([FromBody] CreateIssueDto dto)
 {
-    var nrp = _userContext.GetNRP(); // atau ambil dari token langsung
-    var command = new CreateIssueCommand(dto, nrp); // ✅ benar
+    var nrp = _userContext.GetNRP();
+    var command = new CreateIssueCommand(dto, nrp);
     var result = await _mediator.Send(command);
     return Ok(result);
 }
@@ -61,7 +61,7 @@ public async Task<IActionResult> Create([FromBody] CreateIssueDto dto)
     [HttpPatch("{issueCode}/status")]
     public async Task<IActionResult> ChangeStatus(string issueCode, [FromBody] ChangeIssueStatusDto dto)
     {
-        var nrp = _userContext.GetNRP(); // ambil dari context
+        var nrp = _userContext.GetNRP();
         await _mediator.Send(new ChangeIssueStatusCommand(issueCode, dto.NewStatus, nrp, dto.Note));
         return Ok(new { message = "Issue status updated successfully" });
     }
@@ -77,7 +77,6 @@ public async Task<IActionResult> Create([FromBody] CreateIssueDto dto)
      [HttpGet("assigned")]
         public async Task<IActionResult> GetAssignedIssues()
         {
-            // Ambil userId dari token JWT (claim)
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
             if (userIdClaim == null)
                 return Unauthorized("User ID not found in token.");

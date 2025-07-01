@@ -16,8 +16,6 @@ public class CreateProjectValidator : AbstractValidator<CreateProjectDto>
 
         RuleFor(x => x.Visibility)
             .IsInEnum().WithMessage("Tipe visibility tidak valid.");
-
-        // Optional: validasi URL kalau mau
         RuleFor(x => x.RepositoryUrl)
             .Must(BeValidUrl).When(x => !string.IsNullOrWhiteSpace(x.RepositoryUrl))
             .WithMessage("Repository URL tidak valid.");

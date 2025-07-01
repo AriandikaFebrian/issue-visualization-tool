@@ -28,8 +28,6 @@ export const PositionType = [
 
 export type PositionType = (typeof PositionType)[number];
 
-// src/types/enums.ts
-
 export const DepartmentType = [
   "Engineering",
   "QualityAssurance",

@@ -1,4 +1,3 @@
-// 📁 Application/UseCases/Users/Commands/RegisterUserCommand.cs
 using MediatR;
 using BugNest.Application.Common.Dtos;
 

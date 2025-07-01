@@ -3,7 +3,7 @@ using BugNest.Domain.Enums;
 public interface IAuditableCommand
 {
     ActivityAction Action { get; }
-    ActivityEntityType TargetEntityType { get; } // ✅ Ubah dari string ke enum
+    ActivityEntityType TargetEntityType { get; }
     Guid TargetEntityId { get; }
     string Summary { get; }
     string? PerformedByNRP { get; }

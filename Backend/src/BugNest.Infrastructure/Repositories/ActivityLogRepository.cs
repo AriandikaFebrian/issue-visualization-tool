@@ -57,8 +57,6 @@ public class ActivityLogRepository : IActivityLogRepository
             .OrderByDescending(log => log.CreatedAt)
             .ToListAsync();
     }
-
-    // ✅ NEW: Paged result for general listing
     public async Task<(List<ActivityLog> Logs, int Total)> GetPagedAsync(int page, int pageSize)
     {
         var query = _context.ActivityLogs

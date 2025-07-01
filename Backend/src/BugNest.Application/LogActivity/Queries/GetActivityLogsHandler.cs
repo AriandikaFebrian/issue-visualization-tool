@@ -13,7 +13,7 @@ public class GetActivityLogsQueryHandler : IRequestHandler<GetActivityLogsQuery,
 
     public async Task<GetActivityLogsResult> Handle(GetActivityLogsQuery request, CancellationToken cancellationToken)
     {
-        var logs = await _logRepository.GetAllAsync(); // 🔁 global
+        var logs = await _logRepository.GetAllAsync();
 
         var result = logs
             .OrderByDescending(log => log.CreatedAt)

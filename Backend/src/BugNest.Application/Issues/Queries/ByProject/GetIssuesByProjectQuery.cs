@@ -1,4 +1,3 @@
-// 📁 Application/UseCases/Issues/Queries/GetIssuesByProjectQuery.cs
 using BugNest.Application.DTOs.Issues;
 using MediatR;
 

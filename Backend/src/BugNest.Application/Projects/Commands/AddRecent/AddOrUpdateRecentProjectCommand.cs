@@ -1,4 +1,3 @@
-// 📁 Application/Projects/Commands/AddOrUpdateRecentProject/AddOrUpdateRecentProjectCommand.cs
 using MediatR;
 
 namespace BugNest.Application.Projects.Commands.AddOrUpdateRecentProject;

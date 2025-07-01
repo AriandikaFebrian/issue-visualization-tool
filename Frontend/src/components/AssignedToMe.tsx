@@ -1,4 +1,3 @@
-// AssignedToMePopover.tsx
 import React, { useEffect, useState } from 'react';
 import {
   IconButton, Badge, Popover, Typography, List, ListItem, ListItemText,

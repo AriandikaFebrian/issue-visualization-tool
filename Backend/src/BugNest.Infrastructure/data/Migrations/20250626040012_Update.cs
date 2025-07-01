@@ -6,10 +6,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace BugNest.Infrastructure.Data.Migrations
 {
-    /// <inheritdoc />
     public partial class Update : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -528,8 +526,6 @@ namespace BugNest.Infrastructure.Data.Migrations
                 table: "Tags",
                 column: "ProjectCode");
         }
-
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

@@ -1,7 +1,5 @@
 import axiosInstance from "../lib/axiosInstance";
 import type { RegisterResponse } from "../types/auth";
-
-// Mengirim FormData ke endpoint register
 export const registerUser = async (data: FormData): Promise<RegisterResponse> => {
   const response = await axiosInstance.post("/api/Auth/register", data, {
     headers: {

@@ -1,4 +1,3 @@
-// 📁 BugNest.Infrastructure/Services/AuthService.cs
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -43,8 +42,6 @@ public class AuthService : IAuthService
         new Claim(ClaimTypes.Email, user.Email),
         new Claim(ClaimTypes.Role, user.Role.ToString())
     };
-
-        // ✅ Tambahan klaim custom
         if (!string.IsNullOrWhiteSpace(user.NRP))
             claims.Add(new Claim("nrp", user.NRP));
 

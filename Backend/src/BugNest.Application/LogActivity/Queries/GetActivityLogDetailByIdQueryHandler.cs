@@ -43,7 +43,7 @@ public class GetActivityLogDetailByIdQueryHandler : IRequestHandler<GetActivityL
             var issue = await _issueRepository.GetByIdAsync(log.TargetEntityId);
             if (issue != null)
             {
-                targetCode = issue.IssueCode; // ✅ benar
+                targetCode = issue.IssueCode;
                 targetTitle = issue.Title;
             }
         }

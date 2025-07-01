@@ -23,8 +23,6 @@ using BugNest.Application.Projects.Queries.GetRecentProjects;
 using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// 🔌 1. Database setup
 builder.Services.AddDbContext<BugNestDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -39,16 +37,10 @@ builder.Services.AddValidatorsFromAssemblyContaining<GetProjectsByOwnerQueryVali
 builder.Services.AddValidatorsFromAssemblyContaining<GetProjectSummaryQueryValidator>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddHttpContextAccessor();
-// 📦 MediatR & FluentValidation
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(LoginCommandHandler).Assembly));
 builder.Services.AddValidatorsFromAssembly(typeof(CreateLoginValidator).Assembly);
-
-// 🧩 Baru di sini daftar pipeline-nya
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(AuditLoggingBehavior<,>));
-
-
-// 🧩 3. Dependency Injection - Repository & Service only (Handler pakai MediatR)
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
@@ -62,8 +54,6 @@ builder.Services.AddScoped<IRecentProjectRepository, RecentProjectRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<IUserContext, UserContext>();
 builder.Services.AddHttpContextAccessor();
-
-// 🌐 4. CORS Policy
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
@@ -74,8 +64,6 @@ builder.Services.AddCors(options =>
               .AllowCredentials();
     });
 });
-
-// 🔐 5. JWT Authentication
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
     {
@@ -92,8 +80,6 @@ builder.Services.AddAuthentication("Bearer")
     });
 
 builder.Services.AddAuthorization();
-
-// 📚 6. Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -124,15 +110,11 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-
-// 🧾 7. Controller & JSON enum handling
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
-
-// 🚀 8. Build App
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -148,7 +130,7 @@ app.UseStaticFiles(new StaticFileOptions
     FileProvider = new PhysicalFileProvider(
         Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")
     ),
-    RequestPath = "" // serve langsung dari root
+    RequestPath = ""
 });
 
 app.UseCors("AllowFrontend");

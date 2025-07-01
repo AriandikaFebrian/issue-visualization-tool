@@ -48,7 +48,6 @@ const NotificationBell: React.FC = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       const notifs = Array.isArray(res.data) ? res.data : [];
-      // Filter notifikasi yang tidak di-soft-delete
       const visibleNotifs = notifs.filter((n: NotificationItem) => !n.isDeleted);
       setNotifications(visibleNotifs);
     } catch (error) {
@@ -76,7 +75,6 @@ const NotificationBell: React.FC = () => {
     notif: NotificationItem,
     event: React.MouseEvent<HTMLElement>
   ) => {
-    // Tandai sebagai dibaca jika belum
     if (!notif.isRead) {
       try {
         await axios.patch(
@@ -93,8 +91,6 @@ const NotificationBell: React.FC = () => {
         console.error("Gagal menandai sebagai dibaca:", err);
       }
     }
-
-    // Buka popover detail
     setSelectedNotif(notif);
     setDetailAnchorEl(event.currentTarget);
   };

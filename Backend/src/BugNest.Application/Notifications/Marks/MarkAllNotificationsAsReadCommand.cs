@@ -1,4 +1,3 @@
-// Application/UseCases/Notifications/Commands/MarkAllNotificationsAsReadCommand.cs
 using MediatR;
 using System;
 

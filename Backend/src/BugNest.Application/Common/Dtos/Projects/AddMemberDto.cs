@@ -1,4 +1,3 @@
-// 📁 BugNest.Application/DTOs/Projects/AddMemberDto.cs
 namespace BugNest.Application.DTOs.Projects;
 
 public class AddMemberDto

@@ -22,7 +22,7 @@ public class ProjectMemberRepository : IProjectMemberRepository
     public async Task<List<ProjectMember>> GetMembersByProjectIdAsync(Guid projectId)
     {
         return await _context.ProjectMembers
-            .Include(pm => pm.User) // ✅ penting agar data Username, Email dll. tersedia
+            .Include(pm => pm.User)
             .Where(pm => pm.ProjectId == projectId)
             .ToListAsync();
     }

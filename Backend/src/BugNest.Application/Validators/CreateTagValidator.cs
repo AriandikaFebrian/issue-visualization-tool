@@ -9,6 +9,5 @@ public class CreateTagValidator : AbstractValidator<CreateTagDto>
     {
         RuleFor(x => x.Name).NotEmpty().MaximumLength(50);
         RuleFor(x => x.Color).NotEmpty();
-        // ProjectCode optional
     }
 }

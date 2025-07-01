@@ -17,7 +17,6 @@ import WorkspacesIcon from "@mui/icons-material/Workspaces";
 import LogoutIcon from "@mui/icons-material/Logout";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
-import RecentIssues from "../RecentIssues"; // ✅ Import komponen
 import RecentProjectFeed from "../RecentProjectFeed";
 
 type SidebarProps = {

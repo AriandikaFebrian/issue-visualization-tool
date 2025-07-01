@@ -43,7 +43,7 @@ const PublicProjectFeedList: React.FC = () => {
       setTimeout(() => {
         setShowAll(true);
         setIsExpanding(false);
-      }, 600); // delay animasi loading 600ms
+      }, 600);
     } else {
       setShowAll(false);
     }

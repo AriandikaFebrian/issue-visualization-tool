@@ -1,19 +1,16 @@
-// src/App.tsx
 import { Routes, Route, Navigate, Outlet, useNavigate } from "react-router-dom";
 import RegisterPage from "./pages/Register";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import AuthPage from "./pages/AuthPage";
 import Navbar from "./components/Reuseable/Navbar";
-import Sidebar from "./components/Reuseable/Sidebar"; // ⬅️ Tambahkan Sidebar
+import Sidebar from "./components/Reuseable/Sidebar";
 import { useEffect, useState } from "react";
 import { Toolbar, Box } from "@mui/material";
 import ProfilePage from "./pages/ProfilePage";
 import { ProfileProvider } from "./context/ProfileContext";
 import BugsPage from "./pages/BugsPage";
 import MyProjectPage from "./pages/MyProjectPage";
-
-// Cek apakah user terautentikasi
 function useAuth() {
   const token = localStorage.getItem("token");
   return Boolean(token);
@@ -22,7 +19,7 @@ function useAuth() {
 function PrivateRoute() {
   const isAuth = useAuth();
   const navigate = useNavigate();
-  const [openSidebar, setOpenSidebar] = useState(false); // ⬅️ ini
+  const [openSidebar, setOpenSidebar] = useState(false);
 
   useEffect(() => {
     if (!isAuth) navigate("/login");
@@ -35,12 +32,12 @@ function PrivateRoute() {
       {/* Sidebar (bisa collapse) */}
       <Sidebar
         open={openSidebar}
-        onClose={() => setOpenSidebar(false)} // ⬅️ kirim fungsi tutup
+        onClose={() => setOpenSidebar(false)}
       />
 
       <Navbar
         token={localStorage.getItem("token") || ""}
-        onOpenSidebar={() => setOpenSidebar(true)} // ⬅️ kirim fungsi buka
+        onOpenSidebar={() => setOpenSidebar(true)}
       />
 
       <Toolbar />
@@ -51,8 +48,6 @@ function PrivateRoute() {
     </>
   );
 }
-
-// Root komponen
 function App() {
   return (
     <ProfileProvider>

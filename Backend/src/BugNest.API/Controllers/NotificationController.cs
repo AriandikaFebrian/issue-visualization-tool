@@ -21,8 +21,6 @@ public class NotificationController : ControllerBase
         _mediator = mediator;
         _userRepository = userRepository;
     }
-
-    // ✅ Semua notifikasi user
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
@@ -33,8 +31,6 @@ public class NotificationController : ControllerBase
         var result = await _mediator.Send(new GetNotificationsQuery(nrp, onlyUnread: false));
         return Ok(result);
     }
-
-    // ✅ Notifikasi unread saja
     [HttpGet("unread")]
     public async Task<IActionResult> GetUnread()
     {
@@ -45,8 +41,6 @@ public class NotificationController : ControllerBase
         var result = await _mediator.Send(new GetNotificationsQuery(nrp, onlyUnread: true));
         return Ok(result);
     }
-
-    // ✅ Tandai satu notifikasi sebagai read
     [HttpPatch("{id}/read")]
     public async Task<IActionResult> MarkAsRead(Guid id)
     {
@@ -57,8 +51,6 @@ public class NotificationController : ControllerBase
         await _mediator.Send(new MarkNotificationAsReadCommand(id, userId.Value));
         return Ok(new { message = "Notification marked as read" });
     }
-
-    // ✅ Tandai semua sebagai read
     [HttpPatch("read-all")]
     public async Task<IActionResult> MarkAllAsRead()
     {
@@ -69,15 +61,11 @@ public class NotificationController : ControllerBase
         await _mediator.Send(new MarkAllNotificationsAsReadCommand(userId.Value));
         return Ok(new { message = "All notifications marked as read" });
     }
-
-    // ✅ Ambil UserId dari token
     private Guid? GetUserIdFromToken()
     {
         var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         return Guid.TryParse(userIdStr, out var userId) ? userId : null;
     }
-
-    // ✅ Ambil NRP dari user ID (berdasarkan token)
     private async Task<string?> GetCurrentUserNRP()
     {
         var userId = GetUserIdFromToken();

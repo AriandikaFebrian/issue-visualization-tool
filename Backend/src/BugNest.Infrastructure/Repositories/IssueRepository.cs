@@ -62,7 +62,7 @@ public class IssueRepository : IIssueRepository
     public async Task<List<Issue>> GetRecentIssuesAsync(int count)
 {
     return await _context.Issues
-        .Where(i => i.Status != IssueStatus.Closed) // ✅ filter
+        .Where(i => i.Status != IssueStatus.Closed)
         .OrderByDescending(i => i.CreatedAt)
         .Include(i => i.Project)
         .Take(count)

@@ -1,4 +1,3 @@
-// 📁 BugNest.Infrastructure/Data/BugNestDbContext.cs
 using Microsoft.EntityFrameworkCore;
 using BugNest.Domain.Entities;
 
@@ -121,7 +120,7 @@ public class BugNestDbContext : DbContext
 
 
         modelBuilder.Entity<RecentProjectAccess>()
-            .HasKey(r => r.Id); // Atau pakai composite key: r.NRP + r.ProjectCode
+            .HasKey(r => r.Id);
 
         modelBuilder.Entity<RecentProjectAccess>()
             .HasOne(r => r.Project)

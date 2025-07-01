@@ -1,4 +1,3 @@
-// 📁 src/api/projectApi.ts
 import axiosInstance from "../lib/axiosInstance";
 import type { Project } from "../types/project";
 

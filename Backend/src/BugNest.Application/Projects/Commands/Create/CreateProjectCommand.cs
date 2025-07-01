@@ -7,18 +7,14 @@ namespace BugNest.Application.Projects.Commands.CreateProject;
 public class CreateProjectCommand : IRequest<Guid>, IAuditableCommand
 {
     public CreateProjectDto Dto { get; }
-
-    // Properti tambahan untuk logging
-    public Guid CreatedProjectId { get; set; } // ← akan diisi di handler
-    public string NRP { get; set; }            // ← dari controller/user context
+    public Guid CreatedProjectId { get; set; }
+    public string NRP { get; set; }
 
     public CreateProjectCommand(CreateProjectDto dto, string nrp)
     {
         Dto = dto;
         NRP = nrp;
     }
-
-    // IAuditableCommand Implementation
     public ActivityAction Action => ActivityAction.CreatedProject;
     public ActivityEntityType TargetEntityType => ActivityEntityType.Project;
     public Guid TargetEntityId => CreatedProjectId;

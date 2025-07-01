@@ -1,4 +1,3 @@
-// 📁 Application/UseCases/Users/Validators/RegisterUserDtoValidator.cs
 using FluentValidation;
 using BugNest.Application.Common.Dtos;
 

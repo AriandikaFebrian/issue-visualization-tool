@@ -116,12 +116,8 @@ public async Task<IActionResult> GetDetail(string projectCode)
     var userNrp = User.FindFirstValue("nrp");
     if (string.IsNullOrWhiteSpace(userNrp))
         return Unauthorized("NRP tidak ditemukan dalam klaim.");
-
-    // 1. Ambil detail project
     var result = await _mediator.Send(new GetProjectDetailQuery(projectCode, userNrp));
     if (result == null) return NotFound("Project tidak ditemukan.");
-
-    // 2. Simpan ke recent
     await _mediator.Send(new AddOrUpdateRecentProjectCommand(userNrp, projectCode));
 
     return Ok(result);

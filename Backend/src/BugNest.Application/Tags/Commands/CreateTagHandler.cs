@@ -10,13 +10,13 @@ public class CreateTagHandler : IRequestHandler<CreateTagCommand, Guid>
     private readonly ITagRepository _tagRepository;
     private readonly IUserRepository _userRepository;
     private readonly IProjectRepository _projectRepository;
-    private readonly IUserContext _userContext; // ⬅️ Tambahkan ini
+    private readonly IUserContext _userContext;
 
     public CreateTagHandler(
         ITagRepository tagRepository,
         IUserRepository userRepository,
         IProjectRepository projectRepository,
-        IUserContext userContext) // ⬅️ Inject juga di sini
+        IUserContext userContext)
     {
         _tagRepository = tagRepository;
         _userRepository = userRepository;

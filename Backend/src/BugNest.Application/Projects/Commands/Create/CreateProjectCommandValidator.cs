@@ -1,4 +1,3 @@
-// 📁 Application/Projects/Commands/CreateProject/CreateProjectCommandValidator.cs
 using BugNest.Application.Projects.Commands.CreateProject;
 using FluentValidation;
 using BugNest.Domain.Enums;

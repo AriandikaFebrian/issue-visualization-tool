@@ -43,8 +43,6 @@ public class CreateCommentCommandHandler : IRequestHandler<CreateCommentCommand,
 
     await _commentRepository.AddAsync(comment);
     await _commentRepository.SaveChangesAsync();
-
-    // ✅ Penting: isi agar pipeline bisa mencatat aktivitas
     request.CreatedCommentId = comment.Id;
     request.ProjectId = issue.ProjectId;
 

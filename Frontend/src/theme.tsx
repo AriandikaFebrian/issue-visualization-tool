@@ -1,36 +1,35 @@
-// theme.ts
 import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
   palette: {
     mode: 'dark',
     background: {
-      default: '#0d0d0d',     // sangat gelap untuk background utama
-      paper: '#1a1a1a',       // kartu atau container
+      default: '#0d0d0d',
+      paper: '#1a1a1a',
     },
     primary: {
-      main: '#ffffff',        // tombol/teks utama jadi putih bersih
+      main: '#ffffff',
       contrastText: '#000000',
     },
     secondary: {
-      main: '#aaaaaa',        // teks sekunder abu netral
+      main: '#aaaaaa',
     },
     text: {
-      primary: '#f5f5f5',     // putih terang untuk teks utama
-      secondary: '#aaaaaa',   // abu netral untuk teks sekunder
+      primary: '#f5f5f5',
+      secondary: '#aaaaaa',
     },
-    divider: '#2a2a2a',       // garis batas halus
+    divider: '#2a2a2a',
     error: {
-      main: '#e57373',        // merah soft (bisa tetap gelap)
+      main: '#e57373',
     },
     warning: {
-      main: '#ffb74d',        // kuning lembut
+      main: '#ffb74d',
     },
     success: {
-      main: '#81c784',        // hijau lembut
+      main: '#81c784',
     },
     info: {
-      main: '#90caf9',        // biru lembut
+      main: '#90caf9',
     },
   },
   typography: {

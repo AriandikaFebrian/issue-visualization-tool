@@ -1,4 +1,3 @@
-// 📁 Application/UseCases/Users/Commands/RegisterUserHandler.cs
 using MediatR;
 using BugNest.Application.Interfaces;
 using BugNest.Domain.Entities;
@@ -21,24 +20,16 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, Register
     public async Task<RegisterUserResponseDto?> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
         var dto = request.Dto;
-
-        // 🔎 Cek email dan username
         if (await _userRepository.EmailExistsAsync(dto.Email))
             return new RegisterUserResponseDto { Message = "Email sudah terdaftar." };
 
         if (await _userRepository.UsernameExistsAsync(dto.Username))
             return new RegisterUserResponseDto { Message = "Username sudah digunakan." };
-
-        // 🎓 Konversi enum department & position
         DepartmentType? department = Enum.TryParse<DepartmentType>(dto.Department, true, out var dept) ? dept : null;
         PositionType? position = Enum.TryParse<PositionType>(dto.Position, true, out var pos) ? pos : null;
 
         var role = Enum.TryParse<UserRole>(dto.Role, true, out var parsedRole) ? parsedRole : UserRole.Developer;
-
-        // 🔢 Generate NRP sesuai role
         var generatedNrp = await GenerateNRPAsync(role);
-
-        // 👤 Buat user baru
         var newUser = new User
         {
             Username = dto.Username,

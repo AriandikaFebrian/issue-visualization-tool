@@ -16,8 +16,6 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { useNavigate } from "react-router-dom";
 import NotificationBell from "./NotificationBell";
 import useScrollDirection from "../../hooks/useScrollDirection";
-
-// ⬅️ Import AssignedToMePopover
 import AssignedToMePopover from "../AssignedToMe";
 
 interface UserProfile {

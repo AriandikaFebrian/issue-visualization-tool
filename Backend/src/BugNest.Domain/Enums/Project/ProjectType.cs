@@ -1,4 +1,3 @@
-// 📁 BugNest.Domain/Enums/ProjectType.cs
 namespace BugNest.Domain.Enums;
 public enum ProjectType
 {
