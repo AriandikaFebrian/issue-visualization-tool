@@ -1,0 +1,34 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Authentication & Identity -->
+    <PackageVersion Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.0.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="8.12.1" />
+    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.12.1" />
+    <PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
+    <!-- EF Core & Database -->
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
+    <!-- ASP.NET Core -->
+    <PackageVersion Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="8.0.0" />
+    <!-- Configuration & DI -->
+    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.6" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+    <!-- MediatR + PipelineBehavior -->
+    <PackageVersion Include="MediatR" Version="12.5.0" />
+    <PackageVersion Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="12.5.0" />
+    <PackageVersion Include="MediatR.Pipeline" Version="12.5.0" />
+    <!-- Validation -->
+    <PackageVersion Include="FluentValidation" Version="12.0.0" />
+  </ItemGroup>
+</Project>
