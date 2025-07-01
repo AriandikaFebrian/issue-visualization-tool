@@ -21,6 +21,7 @@ using BugNest.Application.Projects.Queries.GetProjectsByOwner;
 using BugNest.Application.Projects.Queries.GetProjectSummary;
 using BugNest.Application.Projects.Queries.GetRecentProjects;
 using MediatR;
+using BugNest.Application.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<BugNestDbContext>(options =>
@@ -53,6 +54,12 @@ builder.Services.AddScoped<IActivityLogRepository, ActivityLogRepository>();
 builder.Services.AddScoped<IRecentProjectRepository, RecentProjectRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<IUserContext, UserContext>();
+builder.Services.AddScoped<IProjectSourceService, ProjectSourceService>();
+builder.Services.AddSingleton<IWebEnvironment, WebEnvironment>(); // jangan lupa juga class WebEnvironment-nya
+
+// Di Program.cs atau Startup.cs
+builder.Services.AddScoped<IProjectSourceService, ProjectSourceService>();
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddCors(options =>
 {

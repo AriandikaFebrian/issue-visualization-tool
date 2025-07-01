@@ -36,9 +36,10 @@ public class CreatorUserDto
 public class TagDto
 {
     public Guid Id { get; set; }
-    public string Name { get; set; } = "";
-    public string Color { get; set; } = "#cccccc";
-    public string? Category { get; set; }
+    public string Name { get; set; } = default!;
+    public string Color { get; set; } = default!;
+    public string Category { get; set; } = default!;
+    public string? ProjectCode { get; set; }
 }
 
 

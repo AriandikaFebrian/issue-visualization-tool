@@ -16,6 +16,8 @@ using BugNest.Application.Projects.Queries.GetAllProjectSummaries;
 using BugNest.Application.Projects.Queries.GetPublicProjectsFeed;
 using BugNest.Application.Projects.Commands.AddOrUpdateRecentProject;
 using Application.Projects.Queries.GetProjectIssueDetail;
+using BugNest.Infrastructure.Services;
+using BugNest.Application.Common;
 
 namespace BugNest.API.Controllers;
 
@@ -28,33 +30,42 @@ public class ProjectController : ControllerBase
     private readonly IProjectRepository _projectRepository;
 
     private readonly IUserRepository _userRepository;
+    private readonly IProjectSourceService _projectSourceService;
+    private readonly IWebEnvironment _webEnv; // ← Tambahkan ini
 
-public ProjectController(IMediator mediator, IProjectRepository projectRepository, IUserRepository userRepository)
-{
-    _mediator = mediator;
-    _projectRepository = projectRepository;
-    _userRepository = userRepository;
-}
+    public ProjectController(
+  IMediator mediator,
+  IProjectRepository projectRepository,
+  IUserRepository userRepository,
+  IWebEnvironment webEnv, // ← Fix typo ini
+  IProjectSourceService projectSourceService) // ← Tambahkan ini
+    {
+        _mediator = mediator;
+        _projectRepository = projectRepository;
+        _userRepository = userRepository;
+        _projectSourceService = projectSourceService;
+        _webEnv = webEnv;// ← Fix typo ini
+    }
 
 
-[HttpPost]
-public async Task<IActionResult> CreateProject([FromBody] CreateProjectDto dto)
-{
-    var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-    if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
-        return Unauthorized();
+    [HttpPost]
+    public async Task<IActionResult> CreateProject([FromBody] CreateProjectDto dto)
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
+            return Unauthorized();
 
-    var user = await _userRepository.GetByIdAsync(userId);
-    if (user == null)
-        return Unauthorized("User tidak ditemukan.");
+        var user = await _userRepository.GetByIdAsync(userId);
+        if (user == null)
+            return Unauthorized("User tidak ditemukan.");
 
-    var nrp = user.NRP;
+        var nrp = user.NRP;
 
-    var command = new CreateProjectCommand(dto, nrp);
-    var result = await _mediator.Send(command);
+        var command = new CreateProjectCommand(dto, nrp);
+        var result = await _mediator.Send(command);
 
-    return Ok(new { ProjectId = result });
-}
+        return Ok(new { ProjectId = result });
+    }
 
 
 
@@ -110,34 +121,34 @@ public async Task<IActionResult> CreateProject([FromBody] CreateProjectDto dto)
         return Ok(result);
     }
 
-[HttpGet("{projectCode}")]
-public async Task<IActionResult> GetDetail(string projectCode)
-{
-    var userNrp = User.FindFirstValue("nrp");
-    if (string.IsNullOrWhiteSpace(userNrp))
-        return Unauthorized("NRP tidak ditemukan dalam klaim.");
-    var result = await _mediator.Send(new GetProjectDetailQuery(projectCode, userNrp));
-    if (result == null) return NotFound("Project tidak ditemukan.");
-    await _mediator.Send(new AddOrUpdateRecentProjectCommand(userNrp, projectCode));
+    [HttpGet("{projectCode}")]
+    public async Task<IActionResult> GetDetail(string projectCode)
+    {
+        var userNrp = User.FindFirstValue("nrp");
+        if (string.IsNullOrWhiteSpace(userNrp))
+            return Unauthorized("NRP tidak ditemukan dalam klaim.");
+        var result = await _mediator.Send(new GetProjectDetailQuery(projectCode, userNrp));
+        if (result == null) return NotFound("Project tidak ditemukan.");
+        await _mediator.Send(new AddOrUpdateRecentProjectCommand(userNrp, projectCode));
 
-    return Ok(result);
-}
-
-
-[HttpGet("recent")]
-public async Task<IActionResult> GetRecent()
-{
-    var result = await _mediator.Send(new GetRecentProjectsQuery());
-    return Ok(result);
-}
+        return Ok(result);
+    }
 
 
-[HttpGet("summaries")]
-public async Task<IActionResult> GetProjectSummaries()
-{
-    var result = await _mediator.Send(new GetAllProjectSummariesQuery());
-    return Ok(result);
-}
+    [HttpGet("recent")]
+    public async Task<IActionResult> GetRecent()
+    {
+        var result = await _mediator.Send(new GetRecentProjectsQuery());
+        return Ok(result);
+    }
+
+
+    [HttpGet("summaries")]
+    public async Task<IActionResult> GetProjectSummaries()
+    {
+        var result = await _mediator.Send(new GetAllProjectSummariesQuery());
+        return Ok(result);
+    }
 
 
 
@@ -147,16 +158,97 @@ public async Task<IActionResult> GetProjectSummaries()
         var result = await _mediator.Send(new GetPublicProjectsFeedQuery());
         return Ok(result);
     }
-[HttpGet("{projectCode}/details")]
-public async Task<ActionResult<ProjectIssueDetailDto>> GetProjectIssueDetail(string projectCode)
+    [HttpGet("{projectCode}/details")]
+    public async Task<ActionResult<ProjectIssueDetailDto>> GetProjectIssueDetail(string projectCode)
+    {
+        var result = await _mediator.Send(new GetProjectIssueDetailQuery(projectCode));
+
+        if (result == null)
+            return NotFound();
+
+        return Ok(result);
+    }
+
+    [HttpPost("{projectId}/upload-source")]
+    [RequestSizeLimit(100_000_000)] // 100 MB limit
+    public async Task<IActionResult> UploadSource(Guid projectId, IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+            return BadRequest("File tidak valid.");
+
+        try
+        {
+            var path = await _projectSourceService.UploadAndExtractSourceAsync(projectId, file);
+            return Ok(new { message = "Berhasil upload dan ekstrak source.", path });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+    }
+
+    [HttpGet("{projectId}/source-tree")]
+    public async Task<IActionResult> GetProjectSourceTree(Guid projectId)
+    {
+        var project = await _projectRepository.GetByIdAsync(projectId);
+        if (project == null || string.IsNullOrEmpty(project.SourceUploadPath))
+            return NotFound("Source belum diupload.");
+
+        var rootPath = Path.Combine(_webEnv.WebRootPath ?? "wwwroot", project.SourceUploadPath);
+
+        if (!Directory.Exists(rootPath))
+            return NotFound("Folder tidak ditemukan.");
+
+        var tree = BuildDirectoryTree(rootPath, rootPath); // rootPath as base
+        return Ok(tree);
+    }
+
+    private object BuildDirectoryTree(string path, string basePath)
+    {
+        var name = Path.GetFileName(path);
+        var relativePath = Path.GetRelativePath(basePath, path).Replace("\\", "/");
+
+        var node = new
+        {
+            name,
+            path = relativePath,
+            type = "folder",
+            children = Directory.GetDirectories(path)
+                .Select(dir => BuildDirectoryTree(dir, basePath))
+                .Concat(Directory.GetFiles(path).Select(file => new
+                {
+                    name = Path.GetFileName(file),
+                    path = Path.GetRelativePath(basePath, file).Replace("\\", "/"),
+                    type = "file"
+                }))
+        };
+
+        return node;
+    }
+
+[HttpGet("{projectId}/source-file")]
+public async Task<IActionResult> GetSourceFile(Guid projectId, [FromQuery] string path)
 {
-    var result = await _mediator.Send(new GetProjectIssueDetailQuery(projectCode));
+    if (string.IsNullOrWhiteSpace(path))
+        return BadRequest("Path tidak boleh kosong.");
 
-    if (result == null)
-        return NotFound();
-
-    return Ok(result);
+    try
+    {
+        var content = await _projectSourceService.GetFileContentAsync(projectId, path);
+        return Ok(new { path, content });
+    }
+    catch (FileNotFoundException)
+    {
+        return NotFound("File tidak ditemukan.");
+    }
+    catch (Exception ex)
+    {
+        return BadRequest(new { error = ex.Message });
+    }
 }
+
+
+
 
 
 

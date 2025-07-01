@@ -12,8 +12,14 @@ public class Project : BaseEntity
     public DateTime? UpdatedAt { get; set; }
     public ProjectStatus? Status { get; set; } = ProjectStatus.Planning;
     public ProjectVisibility Visibility { get; set; } = ProjectVisibility.Private;
+    
     public Guid OwnerId { get; set; }
     public User? Owner { get; set; }
+
+    // ✅ Tambahan baru
+    public string? SourceUploadPath { get; set; }
+    public bool HasUploadedSource { get; set; } = false;
+
     public ICollection<ProjectMember> Members { get; set; } = new List<ProjectMember>();
     public ICollection<Issue> Issues { get; set; } = new List<Issue>();
     public ICollection<ActivityLog> ActivityLogs { get; set; } = new List<ActivityLog>();

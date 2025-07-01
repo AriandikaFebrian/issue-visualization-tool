@@ -111,14 +111,20 @@ public class ProjectRepository : IProjectRepository
             .ToListAsync();
     }
 
-public async Task<Project?> GetWithMembersAndOwnerByCodeAsync(string projectCode)
+    public async Task<bool> IsSourcePathUsedAsync(string sourcePath)
 {
-    return await _context.Projects
-        .Include(p => p.Owner)
-        .Include(p => p.Members)
-            .ThenInclude(pm => pm.User)
-        .FirstOrDefaultAsync(p => p.ProjectCode == projectCode);
+    return await _context.Projects.AnyAsync(p => p.SourceUploadPath == sourcePath);
 }
+
+
+public async Task<Project?> GetWithMembersAndOwnerByCodeAsync(string projectCode)
+    {
+        return await _context.Projects
+            .Include(p => p.Owner)
+            .Include(p => p.Members)
+                .ThenInclude(pm => pm.User)
+            .FirstOrDefaultAsync(p => p.ProjectCode == projectCode);
+    }
 
 public async Task<List<Issue>> GetIssuesByProjectCodeAsync(string projectCode, CancellationToken cancellationToken = default)
 {

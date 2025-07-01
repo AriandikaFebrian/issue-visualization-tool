@@ -6,8 +6,8 @@ public class Tag : BaseEntity
     public string Color { get; set; } = "#000000";
 
     public required string Category { get; set; }
-  public string? ProjectCode { get; set; }
-public Project? Project { get; set; }
+    public string? ProjectCode { get; set; }
+    public Project? Project { get; set; }
     public Guid CreatedBy { get; set; }
     public User? Creator { get; set; }
     public bool IsArchived { get; set; } = false;

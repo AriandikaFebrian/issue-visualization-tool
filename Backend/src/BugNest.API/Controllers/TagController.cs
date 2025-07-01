@@ -1,5 +1,6 @@
 using BugNest.Application.DTOs.Tags;
 using BugNest.Application.UseCases.Tags.Commands;
+using BugNest.Application.UseCases.Tags.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,4 +31,12 @@ public class TagController : ControllerBase
         var tagId = await _mediator.Send(new CreateTagCommand(dto));
         return Ok(new { TagId = tagId });
     }
+
+    [HttpGet]
+public async Task<IActionResult> GetAllTags([FromQuery] string? projectCode)
+{
+    var tags = await _mediator.Send(new GetAllTagsQuery(projectCode));
+    return Ok(tags);
+}
+
 }
