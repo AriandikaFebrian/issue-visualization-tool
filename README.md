@@ -1,220 +1,162 @@
-🐛 BugNest - Issue Visualization Tool
+[![License: CC BY-NC-ND 4.0](https://img.shields.io/badge/License-CC%20BY--NC--ND%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-nd/4.0/)
 
+# 🐛 BugNest — Issue Visualization Tool
 
+**BugNest** is an internal platform designed to track and visualize software issues and bugs across teams and projects. It aims to improve collaboration, transparency, and efficiency in issue management for development teams.
 
-BugNest is an internal platform for tracking and visualizing software issues and bugs across teams and projects. It provides a modern UI and robust backend API to simplify collaboration, improve transparency, and streamline issue management. Built to empower development teams with clear visibility into their work through structured project spaces, smart tagging, real-time activity logs, and insightful summaries.
+---
 
-📦 Tech Stack Overview
+## 🚀 Key Features
 
-🖼 Frontend
+- 📌 **Project Dashboard** (public & private)
+- 🧑‍💻 **Auto-login** with JWT
+- 🧠 **Smart Tagging**
+- 🔄 **Real-time Activity Feed**
+- 🧪 **Issue Management** with user assignment & status tracking
+- 💬 **Comment System**
+- 🔔 **Notification Panel**
+- 📊 **Power BI-compatible endpoints** *(planned)*
 
-Framework: React with Vite — fast, modern build tool
+---
 
-Language: TypeScript
+## 📦 Tech Stack
 
-UI Kit: Material UI 5
+### 🖥 Frontend (React + Vite)
+- Framework: `React + Vite`
+- Language: `TypeScript`
+- UI: `Material UI v5`
+- State Management: `TanStack Query`, `Context API`, `Zustand (optional)`
+- Routing: `React Router DOM`
+- HTTP: `Axios` (JWT via headers)
 
-State/Async Handling: TanStack Query for fetching/caching
+### 🧠 Backend (.NET 7 Web API)
+- Framework: `ASP.NET Core 7`
+- Architecture: `Clean Architecture + CQRS`
+- Patterns: `MediatR`, `FluentValidation`
+- ORM: `Entity Framework Core`
+- Database: `PostgreSQL` / `SQL Server`
+- Authentication: `JWT Bearer`
+- Documentation: `Swagger (Swashbuckle)`
+- Logging: `Serilog`
 
-Routing: React Router DOM
+---
 
-Authentication: JWT Token stored in HTTP Headers
+## 🧑‍💻 Getting Started
 
-Utilities: Axios, Context API, Zustand (if needed)
+### 🔧 Frontend Setup
 
-🧠 Backend
-
-Framework: ASP.NET Core 7 Web API
-
-Architecture: Clean Architecture + CQRS (Command Query Responsibility Segregation)
-
-Mediator Pattern: MediatR
-
-ORM: Entity Framework Core
-
-Auth: JWT Bearer Authentication
-
-Database: PostgreSQL / SQL Server
-
-Validation: FluentValidation
-
-Logging: Serilog (recommended)
-
-Documentation: Swagger (Swashbuckle)
-
-🚀 Getting Started
-
-🖥 Frontend Setup (React Vite)
-
+```bash
 cd frontend
 npm install
 npm run dev
+```
 
-Visit: http://localhost:5173
+📍 Visit: [http://localhost:5173](http://localhost:5173)
 
-Key Features:
+> Make sure to configure Axios base URL to your backend (e.g., `http://localhost:5001`)
 
-Auto-login with JWT
+### 🔧 Backend Setup
 
-Sidebar + top navbar layout
-
-Activity Feed from backend
-
-Public and private projects
-
-Tag management modal (connected to backend)
-
-⚙️ Configure Axios with the correct base URL for your backend (e.g., http://localhost:5001).
-
-🧠 Backend Setup (.NET Web API)
-
+```bash
 cd backend
-# Using .NET CLI
 dotnet build
-
-# Apply migrations
 dotnet ef database update
-
-# Run
 dotnet run
+```
 
-API available at: https://localhost:5001/api
+📍 API available at: [https://localhost:5001/api](https://localhost:5001/api)
 
-Environment Settings:
+> Ensure your `appsettings.Development.json` contains:
+> - Valid JWT secret
+> - Correct database connection string
 
-Ensure valid appsettings.Development.json
+---
 
-JWT secret and connection strings must be configured properly
+## 🔐 Authentication (JWT)
 
-🔐 Authentication
+After login, an `access_token` is returned. Include it in all authenticated requests:
 
-JWT-based auth system with secure claims
-
-Login returns access_token
-
-Claims:
-
-nameid: UserId
-
-nrp: Employee NRP
-
-All authorized requests must include:
-
+```http
 Authorization: Bearer <your-jwt-token>
+```
 
-📌 API Modules Summary
+### 🎫 JWT Claims
 
-🔑 Auth
+| Claim    | Description    |
+|----------|----------------|
+| `nameid` | User ID        |
+| `nrp`    | Employee NRP   |
 
-POST /api/auth/register
+---
 
-POST /api/auth/login
+## 📌 API Endpoints Overview
 
-GET /api/auth/me
+### 🔑 Auth
+- `POST /api/auth/register` — Register
+- `POST /api/auth/login` — Login
+- `GET /api/auth/me` — Get current user profile
+- `PUT /api/auth/me` — Update profile
+- `POST /api/auth/upload` — Upload profile picture
 
-PUT /api/auth/me
+### 📁 Project Management
+- `POST /api/project` — Create project
+- `GET /api/project/mine` — Get user-owned projects
+- `GET /api/project/{code}` — Get project details
+- `GET /api/project/{code}/summary` — Project summary
+- `GET /api/project/summaries` — All project summaries
+- `GET /api/project/projects/public-feed` — Public projects
+- `POST /api/project/{code}/members` — Add member
+- `GET /api/project/{code}/members` — List project members
 
-POST /api/auth/upload — Upload profile picture
+### 🧪 Tags
+- `POST /api/tag` — Create tag (auto-injects `createdByNRP` from JWT)
 
-📁 Project Management
+### 🐛 Issues
+- `POST /api/issue` — Create issue
+- `GET /api/issue/by-code/{projectCode}` — Get project issues
+- `PUT /api/issue/{code}/assign-users` — Assign users
+- `PATCH /api/issue/{code}/status` — Change issue status
+- `GET /api/issue/{code}/history` — Issue history
+- `GET /api/issue/assigned` — Assigned to current user
+- `GET /api/issue/recent` — Recent issues
 
-POST /api/project — Create a new project
+### 💬 Comments
+- `GET /api/comments/issue/{code}` — Get comments for an issue
+- `POST /api/comments` — Add comment (requires NRP in token)
 
-GET /api/project/mine — Get all projects owned by current user
+### 🔔 Notifications
+- `GET /api/notification` — All notifications
+- `GET /api/notification/unread` — Unread only
+- `PATCH /api/notification/{id}/read` — Mark as read
+- `PATCH /api/notification/read-all` — Mark all as read
 
-GET /api/project/{projectCode} — Project detail + save to recent
+### 📜 Activity Logs
+- `GET /api/activities` — Paginated list
+- `GET /api/activities/{id}` — Activity detail
 
-GET /api/project/{projectCode}/summary
+### 📊 Power BI Integration *(Planned)*
+- Expose data endpoints: issue trends, tag usage, notification count, project creation over time
 
-GET /api/project/{projectCode}/members — List all members in a project
+---
 
-POST /api/project/{projectCode}/members — Add member (only by project owner)
+## 📄 License
 
-GET /api/project/summaries — Get all project summaries
+[![License: CC BY-NC-ND 4.0](https://img.shields.io/badge/License-CC%20BY--NC--ND%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-nd/4.0/)
 
-GET /api/project/recent — Recently opened projects
+This project is licensed under the **Creative Commons BY-NC-ND 4.0** license.
 
-GET /api/project/projects/public-feed — Publicly visible projects
+- ✅ Attribution required
+- ❌ Non-commercial use only
+- ❌ No derivative works allowed
 
-GET /api/project/{projectCode}/details — Summary for project dashboard
+---
 
-🧪 Tags
+## 👤 Author
 
-POST /api/tag — Create a tag
+**Ariandika Febrian**  
+📌 Creator & Maintainer of BugNest  
+🌟 Built for internal IT teams & developers who need clean issue visibility
 
-Automatically injects createdByNRP from token claim
-
-🐛 Issues
-
-POST /api/issue — Create new issue
-
-GET /api/issue/by-code/{projectCode} — Get issues by project
-
-PUT /api/issue/{issueCode}/assign-users — Assign NRP(s) to issue
-
-PATCH /api/issue/{issueCode}/status — Change status of issue
-
-GET /api/issue/{issueCode}/history — List history of an issue
-
-GET /api/issue/recent — Get most recently created issues
-
-GET /api/issue/assigned — Get issues assigned to current user
-
-💬 Comments
-
-GET /api/comments/issue/{issueCode} — Get all comments under an issue
-
-POST /api/comments — Add comment to issue (requires NRP in token)
-
-🔔 Notifications
-
-GET /api/notification — All notifications for logged-in user
-
-GET /api/notification/unread — Only unread notifications
-
-PATCH /api/notification/{id}/read — Mark one as read
-
-PATCH /api/notification/read-all — Mark all as read
-
-📜 Activity Logs
-
-GET /api/activities — Paginated activity list
-
-GET /api/activities/{id} — Detailed view per activity
-
-📊 Power BI Compatibility (Planned)
-
-Expose raw or pre-aggregated endpoints for visualizing trends:
-
-Issue volume
-
-Tag usage
-
-Notification count
-
-Project creation over time
-
-📄 License
-
-This repository is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0) license.
-
-✅ Attribution required
-
-🚫 No commercial use
-
-🚫 No modifications or derivative works
-
-
-
-👤 Author
-
-Ariandika FebrianCreator & maintainer of BugNest — crafted for internal IT teams and developers aiming for streamlined issue visibility.
-
-Want to contribute? Fork it, credit it, and use it internally — no problem.
-
-📬 Contact
-
-GitHub: @AriandikaFebrian
-
-Email: available on request via GitHub profile
-
+📬 Contact:
+- GitHub: [@AriandikaFebrian](https://github.com/AriandikaFebrian)
+- Email: available via GitHub profile
