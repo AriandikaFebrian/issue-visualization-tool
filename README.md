@@ -12,6 +12,13 @@
 
 ---
 
+## 📸 Screenshots
+
+### 🔍 Dashboard
+![Dashboard](./assets/Home_Preview.png)
+
+---
+
 ## 🚀 Key Features
 
 - 📌 **Project Dashboard** (public & private)
