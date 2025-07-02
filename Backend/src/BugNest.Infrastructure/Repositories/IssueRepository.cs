@@ -111,6 +111,45 @@ public async Task<List<Issue>> GetIssuesAssignedToUserAsync(Guid userId)
         .FirstOrDefaultAsync(i => i.IssueCode == issueCode);
 }
 
+
+public async Task<int> GetTotalIssuesByProjectIdAsync(Guid projectId)
+{
+    return await _context.Issues.CountAsync(i => i.ProjectId == projectId);
+}
+
+public async Task<Dictionary<string, int>> GetIssueStatusCountsByProjectIdAsync(Guid projectId)
+{
+    return await _context.Issues
+        .Where(i => i.ProjectId == projectId)
+        .GroupBy(i => i.Status.ToString())
+        .ToDictionaryAsync(g => g.Key, g => g.Count());
+}
+
+public async Task<DateTime?> GetLastActivityAtByProjectIdAsync(Guid projectId)
+{
+    return await _context.Issues
+        .Where(i => i.ProjectId == projectId)
+        .MaxAsync(i => (DateTime?)i.UpdatedAt ?? i.CreatedAt);
+}
+
+public async Task<List<string>> GetRecentIssueTitlesByProjectIdAsync(Guid projectId, int count = 3)
+{
+    return await _context.Issues
+        .Where(i => i.ProjectId == projectId)
+        .OrderByDescending(i => i.CreatedAt)
+        .Select(i => i.Title)
+        .Take(count)
+        .ToListAsync();
+}
+
+public async Task<List<Issue>> GetByProjectCodeAsync(string projectCode)
+{
+    return await _context.Issues
+        .Where(i => i.Project!.ProjectCode == projectCode)
+        .Include(i => i.Project)
+        .ToListAsync();
+}
+
     
 
     public async Task SaveChangesAsync()

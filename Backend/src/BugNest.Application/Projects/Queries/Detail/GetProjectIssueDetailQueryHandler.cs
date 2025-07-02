@@ -28,9 +28,7 @@ public class GetProjectIssueDetailQueryHandler : IRequestHandler<GetProjectIssue
             .GroupBy(i => i.Status)
             .ToDictionary(g => g.Key.ToString(), g => g.Count());
 
-        var resolved = issues.Count(i => i.Status == IssueStatus.Resolved);
         var total = issues.Count;
-        var progress = total > 0 ? (double)resolved / total * 100 : 0;
 
         return new ProjectIssueDetailDto
         {
@@ -62,7 +60,6 @@ public class GetProjectIssueDetailQueryHandler : IRequestHandler<GetProjectIssue
 
             TotalIssues = total,
             IssueStatusCounts = statusCounts,
-            ProgressPercentage = progress,
 
             RecentIssues = issues
                 .OrderByDescending(i => i.CreatedAt)
@@ -73,9 +70,8 @@ public class GetProjectIssueDetailQueryHandler : IRequestHandler<GetProjectIssue
                     Title = i.Title,
                     Status = i.Status,
                     Priority = i.Priority,
-
-                                        CreatedAt = i.CreatedAt,
-                                        AssignedUsers = i.AssignedUsers.Select(u => new AssignedUserDto
+                    CreatedAt = i.CreatedAt,
+                    AssignedUsers = i.AssignedUsers.Select(u => new AssignedUserDto
                     {
                         UserId = u.User.Id,
                         NRP = u.User.NRP,
@@ -87,7 +83,6 @@ public class GetProjectIssueDetailQueryHandler : IRequestHandler<GetProjectIssue
                         Department = u.User.Department?.ToString(),
                         ProfilePictureUrl = u.User.ProfilePictureUrl
                     }).ToList()
-
                 }).ToList(),
 
             RecentIssueSummaries = issues

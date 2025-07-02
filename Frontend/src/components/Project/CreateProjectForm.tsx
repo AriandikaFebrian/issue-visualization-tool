@@ -1,3 +1,4 @@
+// CreateProjectForm.tsx
 import React, { useState } from "react";
 import {
   TextField,
@@ -7,7 +8,6 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-
 import { ProjectStatus, ProjectVisibility } from "../../types/enums";
 
 const statuses = ProjectStatus.map((status) => ({
@@ -20,7 +20,11 @@ const visibilities = ProjectVisibility.map((vis) => ({
   label: vis,
 }));
 
-const CreateProjectForm: React.FC = () => {
+interface Props {
+  onSuccess?: () => void;
+}
+
+const CreateProjectForm: React.FC<Props> = ({ onSuccess }) => {
   const token = localStorage.getItem("token");
 
   const [name, setName] = useState("");
@@ -72,6 +76,8 @@ const CreateProjectForm: React.FC = () => {
       setDocumentationUrl("");
       setStatus(ProjectStatus[0]);
       setVisibility(ProjectVisibility[0]);
+
+      if (onSuccess) onSuccess();
     } catch (err: any) {
       setError(err.response?.data?.message || "Terjadi kesalahan saat membuat project");
     } finally {
@@ -80,11 +86,7 @@ const CreateProjectForm: React.FC = () => {
   };
 
   return (
-    <Box maxWidth={600} mx="auto" p={3} component="form" onSubmit={handleSubmit}>
-      <Typography variant="h5" mb={3}>
-        Buat Project Baru
-      </Typography>
-
+    <Box component="form" onSubmit={handleSubmit}>
       <TextField
         label="Nama Project"
         value={name}

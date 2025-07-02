@@ -121,18 +121,6 @@ public class ProjectController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("{projectCode}")]
-    public async Task<IActionResult> GetDetail(string projectCode)
-    {
-        var userNrp = User.FindFirstValue("nrp");
-        if (string.IsNullOrWhiteSpace(userNrp))
-            return Unauthorized("NRP tidak ditemukan dalam klaim.");
-        var result = await _mediator.Send(new GetProjectDetailQuery(projectCode, userNrp));
-        if (result == null) return NotFound("Project tidak ditemukan.");
-        await _mediator.Send(new AddOrUpdateRecentProjectCommand(userNrp, projectCode));
-
-        return Ok(result);
-    }
 
 
     [HttpGet("recent")]
@@ -158,16 +146,25 @@ public class ProjectController : ControllerBase
         var result = await _mediator.Send(new GetPublicProjectsFeedQuery());
         return Ok(result);
     }
-    [HttpGet("{projectCode}/details")]
-    public async Task<ActionResult<ProjectIssueDetailDto>> GetProjectIssueDetail(string projectCode)
-    {
-        var result = await _mediator.Send(new GetProjectIssueDetailQuery(projectCode));
 
-        if (result == null)
-            return NotFound();
+[HttpGet("{projectCode}/details")]
+public async Task<ActionResult<ProjectIssueDetailDto>> GetProjectIssueDetail(string projectCode)
+{
+    var userNrp = User.FindFirstValue("nrp");
+    if (string.IsNullOrWhiteSpace(userNrp))
+        return Unauthorized("NRP tidak ditemukan dalam klaim.");
 
-        return Ok(result);
-    }
+    // Simpan proyek ke daftar terbaru user
+    await _mediator.Send(new AddOrUpdateRecentProjectCommand(userNrp, projectCode));
+
+    // Ambil detail proyek lengkap beserta ringkasan
+    var detailResult = await _mediator.Send(new GetProjectIssueDetailQuery(projectCode));
+    if (detailResult == null)
+        return NotFound("Project tidak ditemukan.");
+
+    return Ok(detailResult);
+}
+
 
     [HttpPost("{projectId}/upload-source")]
     [RequestSizeLimit(100_000_000)] // 100 MB limit

@@ -18,8 +18,22 @@ public class ProjectIssueDetailDto
 
     public int TotalIssues { get; set; }
     public Dictionary<string, int> IssueStatusCounts { get; set; }
-    public double ProgressPercentage { get; set; }
     public List<IssueDto> RecentIssues { get; set; }
     public List<string> RecentIssueSummaries { get; set; } = new();
+
+     private static readonly string[] CompletedStatuses = new[]
+    {
+        nameof(IssueStatus.Closed),
+        nameof(IssueStatus.Resolved)
+    };
+
+    public double ProgressPercentage => TotalIssues == 0
+        ? 0
+        : Math.Round(
+            (double)IssueStatusCounts
+                .Where(kv => CompletedStatuses.Contains(kv.Key))
+                .Sum(kv => kv.Value) / TotalIssues * 100,
+            2
+        );
 
 }
