@@ -1,0 +1,14 @@
+﻿I'm sorry, but errors were detected in your script. Please correct the
+errors listed below, and try again.
+
+
+File "game/screens.rpy", line 22: 'color' is not a keyword argument or valid child of the textbutton statement.
+    color "#FFFFFF"
+         ^
+
+File "game/screens.rpy", line 104: style property text_size is not known.
+    text_size 24
+             ^
+
+Ren'Py Version: Ren'Py 8.3.7.25031702
+Fri Jun  6 20:54:13 2025

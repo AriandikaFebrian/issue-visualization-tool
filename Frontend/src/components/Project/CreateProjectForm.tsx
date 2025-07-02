@@ -6,6 +6,11 @@ import {
   MenuItem,
   Box,
   Typography,
+  Input,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import axios from "axios";
 import { ProjectStatus, ProjectVisibility } from "../../types/enums";
@@ -36,6 +41,10 @@ const CreateProjectForm: React.FC<Props> = ({ onSuccess }) => {
   const [error, setError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [uploadFile, setUploadFile] = useState<File | null>(null);
+  const [askUpload, setAskUpload] = useState(false);
+  const [newProjectId, setNewProjectId] = useState<string | null>(null);
+  const [showUploadPrompt, setShowUploadPrompt] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,8 +77,11 @@ const CreateProjectForm: React.FC<Props> = ({ onSuccess }) => {
         }
       );
 
-      setSuccessMsg("Project berhasil dibuat dengan ID: " + res.data.projectId);
+      const projectId = res.data.projectId;
+      setNewProjectId(projectId);
+      setShowUploadPrompt(true); // Show prompt after successful create
 
+      // Reset form fields
       setName("");
       setDescription("");
       setRepositoryUrl("");
@@ -81,6 +93,36 @@ const CreateProjectForm: React.FC<Props> = ({ onSuccess }) => {
     } catch (err: any) {
       setError(err.response?.data?.message || "Terjadi kesalahan saat membuat project");
     } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUploadSource = async () => {
+    if (!uploadFile || !newProjectId || !token) return;
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", uploadFile);
+
+      await axios.post(
+        `https://localhost:5001/api/Project/${newProjectId}/upload-source`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      setSuccessMsg("Project berhasil dibuat dan source code di-upload.");
+    } catch (err: any) {
+      setError("Gagal upload source code: " + (err.response?.data?.message || err.message));
+    } finally {
+      // Reset upload state
+      setAskUpload(false);
+      setUploadFile(null);
+      setNewProjectId(null);
       setLoading(false);
     }
   };
@@ -174,6 +216,72 @@ const CreateProjectForm: React.FC<Props> = ({ onSuccess }) => {
       >
         {loading ? "Membuat..." : "Buat Project"}
       </Button>
+
+      {/* Dialog Prompt Upload */}
+      <Dialog open={showUploadPrompt} onClose={() => setShowUploadPrompt(false)}>
+        <DialogTitle>Upload Source Code?</DialogTitle>
+        <DialogContent>
+          <Typography>Apakah kamu ingin meng-upload source code sekarang?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setShowUploadPrompt(false);
+              setNewProjectId(null); // reset
+              setUploadFile(null);
+            }}
+          >
+            Nanti saja
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setShowUploadPrompt(false);
+              setAskUpload(true); // show file upload dialog
+            }}
+          >
+            Ya
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Dialog Upload File ZIP */}
+      <Dialog open={askUpload} onClose={() => setAskUpload(false)}>
+        <DialogTitle>Upload Source Code</DialogTitle>
+        <DialogContent>
+          <Typography>Silakan upload file ZIP berisi source code.</Typography>
+          <Box mt={2}>
+            <Input
+              type="file"
+              inputProps={{ accept: ".zip" }}
+              onChange={(e) => {
+                const target = e.target as HTMLInputElement;
+                if (target.files && target.files.length > 0) {
+                  setUploadFile(target.files[0]);
+                }
+              }}
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setAskUpload(false);
+              setUploadFile(null);
+              setNewProjectId(null);
+            }}
+          >
+            Batal
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleUploadSource}
+            disabled={!uploadFile || loading}
+          >
+            Upload Sekarang
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

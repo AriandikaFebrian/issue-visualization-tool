@@ -25,6 +25,7 @@ import AddIcon from '@mui/icons-material/Add';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import TagCreateModal from './CreateTagModal';
 import LabelIcon from '@mui/icons-material/Label';
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -76,6 +77,8 @@ const ActivityFeed = () => {
 
     loadActivities();
   }, []);
+
+  const navigate = useNavigate();
   
 
   const getIcon = (action: string) => {
@@ -151,7 +154,14 @@ const ActivityFeed = () => {
 
         <Stack direction="row" spacing={1}>
   <Button variant="contained" startIcon={<AddIcon />}>Add Issue</Button>
-  <Button variant="outlined" startIcon={<FolderOpenIcon />}>Create Project</Button>
+<Button
+  variant="outlined"
+  startIcon={<FolderOpenIcon />}
+  onClick={() => navigate("/my-project?create=true")}
+>
+  Create Project
+</Button>
+
  <Button
   variant="outlined"
   color="secondary"

@@ -8,8 +8,10 @@ import {
   Avatar,
   Stack,
   Chip,
+  Button,
 } from "@mui/material";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import ProjectSummaryCard from "./ProjectSummaryCard ";
 
 interface ProjectDetailsModalProps {
@@ -54,6 +56,7 @@ interface Issue {
 }
 
 interface ProjectDetails {
+    Projectid : string;
   projectCode: string;
   name: string;
   description: string;
@@ -82,9 +85,14 @@ const statusColors: Record<string, string> = {
   Reopened: "#f44336",
 };
 
-const ProjectDetailsModal: React.FC<ProjectDetailsModalProps> = ({ open, onClose, projectCode }) => {
+const ProjectDetailsModal: React.FC<ProjectDetailsModalProps> = ({
+  open,
+  onClose,
+  projectCode,
+}) => {
   const [loading, setLoading] = useState(true);
   const [details, setDetails] = useState<ProjectDetails | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (open) {
@@ -95,11 +103,14 @@ const ProjectDetailsModal: React.FC<ProjectDetailsModalProps> = ({ open, onClose
   const fetchDetails = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`https://localhost:5001/api/Project/${projectCode}/details`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const res = await axios.get(
+        `https://localhost:5001/api/Project/${projectCode}/details`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
       setDetails(res.data);
     } catch (err) {
       console.error("Gagal mengambil detail proyek", err);
@@ -130,9 +141,21 @@ const ProjectDetailsModal: React.FC<ProjectDetailsModalProps> = ({ open, onClose
           </Stack>
         ) : (
           <>
-            <Typography variant="h6" gutterBottom>
-              {details.name} ({details.projectCode})
-            </Typography>
+            <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+              <Typography variant="h6">
+                {details.name} ({details.projectCode})
+              </Typography>
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={() =>
+                  navigate(`/projects/${details.projectCode}/source-code`)
+                }
+              >
+                Lihat Source Code
+              </Button>
+            </Box>
+
             <Typography variant="body2" gutterBottom>
               {details.description}
             </Typography>
@@ -144,7 +167,9 @@ const ProjectDetailsModal: React.FC<ProjectDetailsModalProps> = ({ open, onClose
             </Typography>
             <Stack direction="row" spacing={2} alignItems="center" mb={2}>
               <Avatar src={details.owner.profilePictureUrl} />
-              <Typography>{details.owner.fullName} ({details.owner.username})</Typography>
+              <Typography>
+                {details.owner.fullName} ({details.owner.username})
+              </Typography>
             </Stack>
 
             <Typography variant="subtitle2" gutterBottom>
@@ -174,14 +199,25 @@ const ProjectDetailsModal: React.FC<ProjectDetailsModalProps> = ({ open, onClose
                   Detail Issue Terbaru
                 </Typography>
                 {details.recentIssues.map((issue) => (
-                  <Box key={issue.id} mb={2} p={2} sx={{ border: "1px solid #ccc", borderRadius: 1 }}>
+                  <Box
+                    key={issue.id}
+                    mb={2}
+                    p={2}
+                    sx={{ border: "1px solid #ccc", borderRadius: 1 }}
+                  >
                     <Typography variant="body1" fontWeight="bold">
                       {issue.title}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      Status: <span style={{ color: statusColors[issue.status] || "#000" }}>{issue.status}</span> | Priority: {issue.priority}
+                      Status:{" "}
+                      <span style={{ color: statusColors[issue.status] || "#000" }}>
+                        {issue.status}
+                      </span>{" "}
+                      | Priority: {issue.priority}
                     </Typography>
-                    <Typography variant="body2">Dibuat: {new Date(issue.createdAt).toLocaleString()}</Typography>
+                    <Typography variant="body2">
+                      Dibuat: {new Date(issue.createdAt).toLocaleString()}
+                    </Typography>
                   </Box>
                 ))}
               </Box>

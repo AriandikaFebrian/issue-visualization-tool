@@ -184,21 +184,23 @@ public async Task<ActionResult<ProjectIssueDetailDto>> GetProjectIssueDetail(str
         }
     }
 
-    [HttpGet("{projectId}/source-tree")]
-    public async Task<IActionResult> GetProjectSourceTree(Guid projectId)
-    {
-        var project = await _projectRepository.GetByIdAsync(projectId);
-        if (project == null || string.IsNullOrEmpty(project.SourceUploadPath))
-            return NotFound("Source belum diupload.");
+[HttpGet("{projectCode}/source-tree")]
+public async Task<IActionResult> GetProjectSourceTreeByCode(string projectCode)
+{
+    var project = await _projectRepository.GetByCodeAsync(projectCode); // ← gunakan projectCode
+    if (project == null || string.IsNullOrEmpty(project.SourceUploadPath))
+        return NotFound("Source belum diupload.");
 
-        var rootPath = Path.Combine(_webEnv.WebRootPath ?? "wwwroot", project.SourceUploadPath);
+    var rootPath = Path.Combine(_webEnv.WebRootPath ?? "wwwroot", project.SourceUploadPath);
 
-        if (!Directory.Exists(rootPath))
-            return NotFound("Folder tidak ditemukan.");
+    if (!Directory.Exists(rootPath))
+        return NotFound("Folder tidak ditemukan.");
 
-        var tree = BuildDirectoryTree(rootPath, rootPath); // rootPath as base
-        return Ok(tree);
-    }
+    var tree = BuildDirectoryTree(rootPath, rootPath); // rootPath as base
+    return Ok(tree);
+}
+
+
 
     private object BuildDirectoryTree(string path, string basePath)
     {
@@ -223,15 +225,19 @@ public async Task<ActionResult<ProjectIssueDetailDto>> GetProjectIssueDetail(str
         return node;
     }
 
-[HttpGet("{projectId}/source-file")]
-public async Task<IActionResult> GetSourceFile(Guid projectId, [FromQuery] string path)
+[HttpGet("{projectCode}/source-file")]
+public async Task<IActionResult> GetSourceFile(string projectCode, [FromQuery] string path)
 {
     if (string.IsNullOrWhiteSpace(path))
         return BadRequest("Path tidak boleh kosong.");
 
     try
     {
-        var content = await _projectSourceService.GetFileContentAsync(projectId, path);
+        var project = await _projectRepository.GetByCodeAsync(projectCode);
+        if (project == null)
+            return NotFound("Project tidak ditemukan.");
+
+        var content = await _projectSourceService.GetFileContentAsync(project.Id, path);
         return Ok(new { path, content });
     }
     catch (FileNotFoundException)
@@ -243,6 +249,7 @@ public async Task<IActionResult> GetSourceFile(Guid projectId, [FromQuery] strin
         return BadRequest(new { error = ex.Message });
     }
 }
+
 
 
 

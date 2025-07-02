@@ -11,6 +11,7 @@ import ProfilePage from "./pages/ProfilePage";
 import { ProfileProvider } from "./context/ProfileContext";
 import BugsPage from "./pages/BugsPage";
 import MyProjectPage from "./pages/MyProjectPage";
+import SourceCodeViewer from "./pages/SourceCodeViewer";
 function useAuth() {
   const token = localStorage.getItem("token");
   return Boolean(token);
@@ -58,11 +59,16 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} />
 
         {/* Halaman yang butuh login */}
-        <Route element={<PrivateRoute />}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/bugs" element={<BugsPage />} />
-          <Route path="/my-project" element={<MyProjectPage />} />
-        </Route>
+      <Route element={<PrivateRoute />}>
+  <Route path="/" element={<HomePage />} />
+  <Route path="/bugs" element={<BugsPage />} />
+  <Route path="/my-project" element={<MyProjectPage />} />
+  <Route path="/projects" element={<Navigate to="/my-project" replace />} />
+  <Route path="/projects/:projectCode/source-code" element={<SourceCodeViewer />} />
+
+
+</Route>
+
 
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/register" replace />} />

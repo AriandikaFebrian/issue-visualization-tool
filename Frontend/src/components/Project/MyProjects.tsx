@@ -3,10 +3,6 @@ import axios from "axios";
 import {
   Box,
   Typography,
-  Grid,
-  Card,
-  CardContent,
-  CardActions,
   Button,
   Chip,
   CircularProgress,
@@ -16,19 +12,33 @@ import {
   IconButton,
   Snackbar,
   Alert,
+  Tabs,
+  Tab,
+  Divider,
 } from "@mui/material";
 import {
   Folder,
   Person,
   BugReport,
   Visibility,
+  Lock,
+  LockOpen,
   Close,
 } from "@mui/icons-material";
+import { useLocation, useNavigate } from "react-router-dom";
+
 import CreateProjectForm from "./CreateProjectForm";
 import ProjectMembersPopover from "./ProjectMembersPopover";
 import ProjectDetailsModal from "./ProjectDetailsModal";
 
-// Tipe data project
+const projectStatusTabs = [
+  "Planning",
+  "InProgress",
+  "Completed",
+  "OnHold",
+  "Archived",
+];
+
 interface Project {
   id: string;
   name: string;
@@ -57,35 +67,52 @@ const MyProjects: React.FC = () => {
   const [successSnackbar, setSuccessSnackbar] = useState(false);
   const [selectedProjectCode, setSelectedProjectCode] = useState<string | null>(null);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("Planning");
 
-  const fetchProjects = async () => {
-    try {
-      const response = await axios.get("https://localhost:5001/api/Project/mine", {
-        withCredentials: true,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      setProjects(response.data);
-    } catch (error) {
-      console.error("Gagal mengambil project:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await axios.get("https://localhost:5001/api/Project/mine", {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
+        setProjects(response.data);
+      } catch (error) {
+        console.error("Gagal mengambil project:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchProjects();
   }, []);
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("create") === "true") {
+      setOpenModal(true);
+    }
+  }, [location.search]);
+
   const handleModalClose = () => {
     setOpenModal(false);
+    const params = new URLSearchParams(location.search);
+    if (params.has("create")) {
+      params.delete("create");
+      navigate({ pathname: location.pathname, search: params.toString() }, { replace: true });
+    }
   };
 
   const handleSuccessCreate = () => {
-    handleModalClose();
-    fetchProjects();
     setSuccessSnackbar(true);
+    setLoading(true);
+    axios
+      .get("https://localhost:5001/api/Project/mine", {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      })
+      .then((res) => setProjects(res.data))
+      .finally(() => setLoading(false));
   };
 
   const handleOpenDetails = (projectCode: string) => {
@@ -98,6 +125,8 @@ const MyProjects: React.FC = () => {
     setDetailsModalOpen(false);
   };
 
+  const filteredProjects = projects.filter((p) => p.status === activeTab);
+
   return (
     <Box p={4}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
@@ -109,81 +138,76 @@ const MyProjects: React.FC = () => {
         </Button>
       </Box>
 
+      <Tabs
+        value={activeTab}
+        onChange={(e, newValue) => setActiveTab(newValue)}
+        textColor="primary"
+        indicatorColor="primary"
+        sx={{ mb: 3 }}
+      >
+        {projectStatusTabs.map((status) => (
+          <Tab key={status} label={status} value={status} />
+        ))}
+      </Tabs>
+
       {loading ? (
-        <Box display="flex" justifyContent="center" alignItems="center" height="200px">
+        <Box display="flex" alignItems="center" justifyContent="center" height="200px">
           <CircularProgress />
-          <Typography ml={2}>Memuat data proyek...</Typography>
+          <Typography ml={2}>Memuat proyek...</Typography>
         </Box>
-      ) : projects.length === 0 ? (
-        <Typography>Tidak ada proyek.</Typography>
+      ) : filteredProjects.length === 0 ? (
+        <Typography>Tidak ada proyek dengan status {activeTab}.</Typography>
       ) : (
-        <Grid container spacing={3}>
-          {projects.map((project) => (
-            <Grid item xs={12} sm={6} md={4} key={project.id}>
-              <Card
-                variant="outlined"
-                sx={{ height: "100%", display: "flex", flexDirection: "column" }}
-              >
-                <CardContent>
-                  <Stack direction="row" alignItems="center" justifyContent="space-between">
-                    <Typography variant="h6" gutterBottom noWrap>
-                      {project.name}
-                    </Typography>
-                    <Tooltip title={project.visibility}>
-                      <Visibility fontSize="small" />
-                    </Tooltip>
-                  </Stack>
+        <Box>
+          {filteredProjects.map((project, index) => (
+            <Box key={project.id} py={2}>
+              <Stack direction="row" spacing={2} alignItems="center" flexWrap="wrap">
+                <Folder color="action" />
+                <Typography fontWeight="bold" sx={{ flexGrow: 1 }}>
+                  {project.name}
+                </Typography>
+                <Tooltip title={project.visibility}>
+                  {project.visibility === "Private" ? (
+                    <Lock fontSize="small" />
+                  ) : (
+                    <LockOpen fontSize="small" />
+                  )}
+                </Tooltip>
+                <Chip icon={<Person />} label={`${project.memberCount}`} size="small" />
+                <Chip icon={<BugReport />} label={`${project.issueCount}`} size="small" />
+              </Stack>
 
-                  <Typography variant="body2" color="text.secondary" gutterBottom>
-                    {project.description || "No description."}
-                  </Typography>
+              <Typography variant="body2" color="text.secondary" mt={0.5}>
+                {project.description || "No description."}
+              </Typography>
 
-                  <Chip
-                    icon={<Folder />}
-                    label={project.projectCode}
-                    size="small"
-                    sx={{ mb: 1 }}
-                  />
-
-                  <Typography variant="caption" color="text.secondary">
-                    Created: {new Date(project.createdAt).toLocaleDateString()}
-                  </Typography>
-
-                  <Stack direction="row" spacing={1} mt={2}>
-                    <Chip icon={<Person />} label={`${project.memberCount} Members`} size="small" />
-                    <Chip icon={<BugReport />} label={`${project.issueCount} Issues`} size="small" />
-                  </Stack>
-                </CardContent>
-
-                <CardActions sx={{ mt: "auto", justifyContent: "space-between", px: 2 }}>
+              <Stack direction="row" spacing={1} mt={1}>
+                <Button
+                  size="small"
+                  variant="outlined"
+                  onClick={() => handleOpenDetails(project.projectCode)}
+                >
+                  View
+                </Button>
+                {project.repositoryUrl && (
                   <Button
                     size="small"
-                    onClick={() => handleOpenDetails(project.projectCode)}
+                    variant="outlined"
+                    href={project.repositoryUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    View Project
+                    GitHub
                   </Button>
+                )}
+              </Stack>
 
-                  <Stack direction="row" spacing={1}>
-                    <ProjectMembersPopover projectCode={project.projectCode} />
-                    {project.repositoryUrl && (
-                      <Button
-                        size="small"
-                        href={project.repositoryUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        GitHub
-                      </Button>
-                    )}
-                  </Stack>
-                </CardActions>
-              </Card>
-            </Grid>
+              {index < filteredProjects.length - 1 && <Divider sx={{ mt: 2 }} />}
+            </Box>
           ))}
-        </Grid>
+        </Box>
       )}
 
-      {/* Modal Create Project */}
       <Modal open={openModal} onClose={handleModalClose}>
         <Box
           sx={{
@@ -197,10 +221,7 @@ const MyProjects: React.FC = () => {
             position: "relative",
           }}
         >
-          <IconButton
-            onClick={handleModalClose}
-            sx={{ position: "absolute", top: 10, right: 10 }}
-          >
+          <IconButton onClick={handleModalClose} sx={{ position: "absolute", top: 10, right: 10 }}>
             <Close />
           </IconButton>
 
@@ -208,23 +229,17 @@ const MyProjects: React.FC = () => {
         </Box>
       </Modal>
 
-      {/* Snackbar di luar modal */}
       <Snackbar
         open={successSnackbar}
         autoHideDuration={4000}
         onClose={() => setSuccessSnackbar(false)}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert
-          onClose={() => setSuccessSnackbar(false)}
-          severity="success"
-          sx={{ width: "100%" }}
-        >
+        <Alert onClose={() => setSuccessSnackbar(false)} severity="success" sx={{ width: "100%" }}>
           Project berhasil dibuat!
         </Alert>
       </Snackbar>
 
-      {/* Modal Detail Project */}
       {selectedProjectCode && (
         <ProjectDetailsModal
           open={detailsModalOpen}
