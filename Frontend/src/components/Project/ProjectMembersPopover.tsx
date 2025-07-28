@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import {
+  Avatar,
   Box,
   Button,
-  Popover,
-  Typography,
-  IconButton,
+  Chip,
   CircularProgress,
+  Divider,
+  IconButton,
   List,
   ListItem,
   ListItemAvatar,
-  Avatar,
   ListItemText,
-  Chip,
+  Popover,
   Tooltip,
-  Divider,
+  Typography,
 } from "@mui/material";
 import GroupIcon from "@mui/icons-material/Group";
 import axios from "axios";
@@ -28,18 +28,23 @@ type ProjectMember = {
 
 interface Props {
   projectCode: string;
+  asChip?: boolean;
+  memberCount?: number;
 }
 
-const ProjectMembersPopover: React.FC<Props> = ({ projectCode }) => {
+const ProjectMembersPopover: React.FC<Props> = ({
+  projectCode,
+  asChip = false,
+  memberCount = 0,
+}) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [members, setMembers] = useState<ProjectMember[]>([]);
   const [loading, setLoading] = useState(false);
   const [fetched, setFetched] = useState(false);
-  const [showForm, setShowForm] = useState(false); // ✅ tambah ini
+  const [showForm, setShowForm] = useState(false);
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
-
     if (!fetched) {
       fetchMembers();
     }
@@ -47,7 +52,7 @@ const ProjectMembersPopover: React.FC<Props> = ({ projectCode }) => {
 
   const handleClose = () => {
     setAnchorEl(null);
-    setShowForm(false); // tutup form saat popover ditutup
+    setShowForm(false);
   };
 
   const fetchMembers = async () => {
@@ -74,11 +79,22 @@ const ProjectMembersPopover: React.FC<Props> = ({ projectCode }) => {
 
   return (
     <>
-      <Tooltip title="Lihat anggota">
-        <IconButton size="small" onClick={handleOpen}>
-          <GroupIcon />
-        </IconButton>
-      </Tooltip>
+      {asChip ? (
+        <Chip
+          icon={<GroupIcon />}
+          label={`${memberCount} Members`}
+          size="small"
+          onClick={handleOpen}
+          clickable
+          sx={{ cursor: "pointer" }}
+        />
+      ) : (
+        <Tooltip title="Lihat anggota">
+          <IconButton size="small" onClick={handleOpen}>
+            <GroupIcon />
+          </IconButton>
+        </Tooltip>
+      )}
 
       <Popover
         open={open}
@@ -135,8 +151,8 @@ const ProjectMembersPopover: React.FC<Props> = ({ projectCode }) => {
               <AddMemberForm
                 projectCode={projectCode}
                 onSuccess={() => {
-                  fetchMembers(); // refresh data
-                  setShowForm(false); // tutup form
+                  fetchMembers();
+                  setShowForm(false);
                 }}
               />
             )}

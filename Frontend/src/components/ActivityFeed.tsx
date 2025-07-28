@@ -184,18 +184,24 @@ const ActivityFeed = () => {
       ) : (
         <Stack spacing={2}>
           {filteredActivities.map((activity) => (
-            <Paper
-              key={activity.id}
-              onClick={() => handleOpenModal(activity.id)}
-              sx={{
-                p: 2,
-                borderRadius: 2,
-                backgroundColor: theme.palette.mode === 'dark' ? '#1e1e1e' : '#fafafa',
-                border: `1px solid ${theme.palette.divider}`,
-                cursor: 'pointer',
-                '&:hover': { boxShadow: '0px 3px 12px rgba(0,0,0,0.1)' },
-              }}
-            >
+           <Paper
+  key={activity.id}
+  onClick={() => handleOpenModal(activity.id)}
+  sx={{
+    p: 2,
+    borderRadius: 2,
+    backgroundColor: theme.palette.mode === 'dark' ? '#1e1e1e' : '#fafafa',
+    border: `1px solid ${theme.palette.divider}`,
+    cursor: 'pointer',
+    '&:hover': {
+      boxShadow: '0px 4px 12px rgba(0,0,0,0.15)',
+      backgroundColor: theme.palette.mode === 'dark' ? '#2a2a2a' : '#f0f0f0',
+      transform: 'translateY(-2px)',
+      transition: 'all 0.2s ease-in-out',
+    },
+  }}
+>
+
               <Box display="flex" alignItems="center" gap={1}>
                 <Avatar src={activity.userProfileUrl} alt={activity.username}>
                   {activity.username[0]}

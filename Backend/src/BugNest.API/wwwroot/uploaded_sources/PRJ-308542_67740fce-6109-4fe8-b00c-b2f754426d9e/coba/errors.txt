@@ -1,0 +1,10 @@
+﻿I'm sorry, but errors were detected in your script. Please correct the
+errors listed below, and try again.
+
+
+File "game/screens.rpy", line 15: The text statement is not a valid child of the textbutton statement.
+    text:
+        ^
+
+Ren'Py Version: Ren'Py 8.3.7.25031702
+Sun Jun  1 20:34:03 2025

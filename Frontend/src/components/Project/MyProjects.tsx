@@ -162,20 +162,26 @@ const MyProjects: React.FC = () => {
           {filteredProjects.map((project, index) => (
             <Box key={project.id} py={2}>
               <Stack direction="row" spacing={2} alignItems="center" flexWrap="wrap">
-                <Folder color="action" />
-                <Typography fontWeight="bold" sx={{ flexGrow: 1 }}>
-                  {project.name}
-                </Typography>
-                <Tooltip title={project.visibility}>
-                  {project.visibility === "Private" ? (
-                    <Lock fontSize="small" />
-                  ) : (
-                    <LockOpen fontSize="small" />
-                  )}
-                </Tooltip>
-                <Chip icon={<Person />} label={`${project.memberCount}`} size="small" />
-                <Chip icon={<BugReport />} label={`${project.issueCount}`} size="small" />
-              </Stack>
+  <Folder color="action" />
+  <Typography fontWeight="bold" sx={{ flexGrow: 1 }}>
+    {project.name}
+  </Typography>
+  <Tooltip title={project.visibility}>
+    {project.visibility === "Private" ? (
+      <Lock fontSize="small" />
+    ) : (
+      <LockOpen fontSize="small" />
+    )}
+  </Tooltip>
+<ProjectMembersPopover
+  projectCode={project.projectCode}
+  asChip
+  memberCount={project.memberCount}
+/>
+
+  <Chip icon={<BugReport />} label={`${project.issueCount}`} size="small" />
+</Stack>
+
 
               <Typography variant="body2" color="text.secondary" mt={0.5}>
                 {project.description || "No description."}
